@@ -1,0 +1,155 @@
+---
+title: "Simulated Grouped Hyper Data Frame"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+library(knitr)
+opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+# Introduction
+
+This vignette documents the use of package **`groupedHyperframe.random`**, a handy extension of package **`spatstat.random`**.
+
+## Note to Users
+
+Examples in this vignette require that the `search` path has
+
+```{r setup}
+library(groupedHyperframe.random)
+library(spatstat.geom)
+```
+
+## Additional Resources
+
+A development version of package **`groupedHyperframe.random`** is hosted on [Github](https://github.com/tingtingzhan/groupedHyperframe.random).
+
+```{r eval = FALSE}
+devtools::install_github('tingtingzhan/groupedHyperframe.random', build_vignettes = TRUE)
+vignette('intro', package = 'groupedHyperframe.random')
+```
+
+## List of Terms and Abbreviations
+
+```{r echo = FALSE, results = 'asis'}
+c(
+  '`coords`', '$x$- and $y$-coordinates', '`spatstat.geom:::ppp`',
+  '`diag`', 'Diagonal matrix', '`base::diag`',
+  '`groupedHyperframe`', 'Grouped hyper data frame', 'https://github.com/tingtingzhan/groupedHyperframe',
+  '`hypercolumn`', 'Column of hyper data frame', '`spatstat.geom::hyperframe`',
+  '`hyperframe`', 'Hyper data frame', '`spatstat.geom::hyperframe`',
+  '`marks`', 'Mark values', '`spatstat.geom:::ppp`',
+  '`ppp`, `ppp.object`', '(Marked) point pattern', '`spatstat.geom::ppp.object`',
+  '`rlnorm`', 'Log normal random variable', '`stats::rlnorm`', 
+  '`rMatClust`', 'Matern\'s cluster process', '`spatstat.random::rMatClust`',
+  '`rmvnorm_`', 'Multivariate normal random variable', '`groupedHyperframe.random::rmvnorm_`',
+  '`rnbinom`', 'Negative binomial random variable', '`stats::rnbinom`',
+  '`rpoispp`', 'Poisson point pattern', '`spatstat.random::rpoispp`',
+  '`superimpose`', 'Superimpose', '`spatstat.geom::superimpose`'
+) |>
+  matrix(nrow = 3L, dimnames = list(c('Term / Abbreviation', 'Description', 'Reference'), NULL)) |>
+  t.default() |>
+  as.data.frame.matrix() |> 
+  kable()
+```
+
+
+# Random Generator of (Marked) Point Pattern
+
+Function `.rppp()` generates `superimpose`d `ppp.object`.
+
+Example below generates a `coords`-only, no `marks`, realization of two `superimpose`d Matern's cluster processes with parameters $(\kappa, \mu, s) = (10,8,.15)$ and $(5,4,.06)$.
+```{r}
+r = .rppp(rMatClust = list(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
+# plot(r) # suppressed for aesthetics
+```
+
+Example below generates a realization of two `superimpose`d
+`ppp.object`,
+
+* a Matern's cluster processes with parameters $(\kappa,\mu,s) = (10,8,.15)$, a log-normal `mark` with parameters $(\mu,\sigma)=(3,.4)$, and a negative-binomial `mark` with parameters $(r,p)=(4,.3)$.
+
+* a Matern's cluster processes with parameters $(\kappa,\mu,s) = (5,4,.06)$, a log-normal `mark` with parameters $(\mu,\sigma)=(5,.2)$, and a negative-binomial `mark` with parameters $(r,p)=(6,.1)$.
+
+```{r}
+r1 = .rppp(
+ rMatClust = list(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), 
+ rlnorm = list(meanlog = c(3, 5), sdlog = c(.4, .2)),
+ rnbinom = list(size = c(4, 6), prob = c(.3, .1))
+)
+```
+
+Example below generates a realization of two `superimpose`d
+`ppp.object`,
+
+* a Poisson point pattern with parameters $\lambda=3$, a log-normal `mark` with parameters $(\mu,\sigma)=(3,.4)$, and a negative-binomial `mark` with parameters $(r,p)=(4,.3)$.
+
+* a Poisson point pattern with parameters $\lambda=6$, a log-normal `mark` with parameters $(\mu,\sigma)=(5,.2)$, and a negative-binomial `mark` with parameters $(r,p)=(6,.1)$.
+
+```{r}
+r2 = .rppp(
+ rpoispp = list(lambda = c(3, 6)),
+ rlnorm = list(meanlog = c(3, 5), sdlog = c(.4, .2)),
+ rnbinom = list(size = c(4, 6), prob = c(.3, .1))
+)
+```
+
+Currently we cannot generate more than one type of point patterns.  End user may manually superimpose them after generating each separately.
+
+```{r}
+spatstat.geom::superimpose(r1, r2)
+```
+
+
+# Random Generator of `groupedHyperframe`
+
+Now consider two `superimpose`d Matern's cluster processes with a log-normal `mark`. The population parameters are
+```{r}
+(mu = data.frame(kappa = c(3,2), scale = c(.4,.2), mu = c(10,5), meanlog = c(3,5), sdlog = c(.4,.2)))
+```
+
+Suppose we have 3 subjects (e.g., patients). The subject parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a scalar, indicating all-equal `diag`onals.
+```{r}
+Sigma = list(kappa = .2^2, scale = .05^2, mu = .5^2, meanlog = .1^2, sdlog = .01^2)
+```
+
+We make sure that all subject parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.
+```{r}
+(mu. = rmvnorm_(n = 3L, mu = mu, Sigma = Sigma) |> 
+    within.list(expr = {
+      kappa = pmax(kappa, 1 + .Machine$double.eps)
+      mu = pmax(mu, 1 + .Machine$double.eps)
+      scale = pmax(scale, .Machine$double.eps)
+      sdlog = pmax(sdlog, .Machine$double.eps)
+    }))
+```
+
+Suppose that for each subject, we have one to three `ppp.object`s (e.g., medical images). 
+
+```{r}
+set.seed(37); (n = runif(n = 3L, min = 1L, max = 3L) |> floor() |> as.integer()) 
+```
+
+Function `grouped_rppp()` generates a `groupedHyperframe` with a `ppp`-hypercolumn, and a column of subject index (currently hardcoded with the name `f`).
+
+```{r}
+(r = mu. |> 
+  with.default(expr = grouped_rppp(
+  n = n,
+  rMatClust = list(kappa = kappa, scale = scale, mu = mu), 
+  rlnorm = list(meanlog = meanlog, sdlog = sdlog)
+)))
+```
+```{r fig.width=4.5, dpi=150}
+spatstat.geom::plot.hyperframe(r)
+```
+
