@@ -19,25 +19,34 @@ grouped_rppp <- function(n, ..., win = owin(xrange = c(-1,1), yrange = c(-1,1)))
   dots <- list(...)
   dots <- dots[lengths(dots, use.names = FALSE) > 0L]
   
-  tmp <- lapply(dots, FUN = function(.x) { # (.x = dots[[1L]])
-    .mapply(FUN = list, dots = lapply(.x, FUN = function(.y) { # (.y = .x[[1L]])
-      lapply(seq_len(nrow(.y)), FUN = function(i) .y[i, , drop = TRUE])
-    }), MoreArgs = NULL)
-  })
-  pars <- .mapply(FUN = list, dots = tmp, MoreArgs = NULL)
+  pars <- dots |>
+    lapply(FUN = function(x) { # (x = dots[[1L]])
+      x |>
+        lapply(FUN = function(y) { # (y = x[[1L]])
+          y |> 
+            nrow() |> 
+            seq_len() |> 
+            lapply(FUN = function(i) y[i, , drop = TRUE])
+        }) |> 
+        .mapply(FUN = list, MoreArgs = NULL)
+    }) |>
+    .mapply(FUN = list, MoreArgs = NULL)
   
-  suppressMessages(ret0 <- mapply(FUN = function(n, p) { # (p = pars[[1L]])
-    do.call(what = .rppp, args = c(p, list(n = n, win = win, element1 = FALSE)))
-  }, p = pars, n = n))
+  ppp. <- mapply(FUN = function(n, p) { # (p = pars[[1L]])
+    c(p, list(n = n, win = win, element1 = FALSE)) |>
+      do.call(what = .rppp) |>
+      suppressMessages()
+  }, p = pars, n = n) |>
+    unlist(recursive = FALSE)
   
-  f1_ <- seq_along(n)
-  f1 <- rep(f1_, times = n)
-  attr(f1, which = 'levels') <- as.character(f1_)
-  class(f1) <- 'factor'
-  
-  ret <- hyperframe(ppp = unlist(ret0, recursive = FALSE), f = f1)
-  # attr(ret, which = 'group') <- ~ f # don't do this; I hate formula's environment!
-  attr(ret, which = 'group') <- call(name = '~', quote(f))
+  g1_ <- seq_along(n)
+
+  ret <- hyperframe(
+    ppp = ppp., 
+    g1 = g1_ |> rep(times = n) |> as.factor(),
+    g2 = n |> lapply(FUN = seq_len) |> unlist() |> as.factor()
+  )
+  attr(ret, which = 'group') <- '~g1/g2' |> str2lang()
   class(ret) <- c('groupedHyperframe', class(ret))
   return(ret)
   

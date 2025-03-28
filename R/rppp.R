@@ -58,11 +58,12 @@
   par0 <- dots |> unlist(recursive = FALSE) |> as.data.frame.list() # recycle length
   npar <- .row_names_info(par0, type = 2L)
 
-  par <- lapply(r, FUN = function(i) { # (i = 'rMatClust')
-    z <- par0[startsWith(names(par0), prefix = i)]
-    names(z) <- gsub(pattern = paste0('^', i, '\\.'), replacement = '', x = names(z))
-    return(z) # 'data.frame'
-  })
+  par <- r |> 
+    lapply(FUN = function(i) { # (i = 'rStrauss')
+      z <- par0[startsWith(names(par0), prefix = i)]
+      names(z) <- gsub(pattern = paste0('^', i, '\\.'), replacement = '', x = names(z))
+      return(z) # 'data.frame'
+    })
   
   if (!length(par)) stop('length(par) == 0L; not allowed')
   
@@ -83,7 +84,9 @@
     })
   
   fn <- function(j) { # (j = 1L)
-    X <- do.call(what = r[1L], args = c(list(win = win), unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
+    winpar <- switch(r[1L], rStrauss = list(W = win), list(win = win))
+    # tzh will write to Dr. Baddeley after he approves groupedHyperframe.random vignette ... 
+    X <- do.call(what = r[1L], args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
     for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
       X <- do.call(what = rmarks_ppp(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
     } # for-loop is the easiest!!!
