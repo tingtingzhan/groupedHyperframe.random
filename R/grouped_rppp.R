@@ -20,19 +20,19 @@ grouped_rppp <- function(n, ..., win = owin(xrange = c(-1,1), yrange = c(-1,1)))
   dots <- dots[lengths(dots, use.names = FALSE) > 0L]
   
   pars <- dots |>
-    lapply(FUN = function(x) { # (x = dots[[1L]])
+    lapply(FUN = \(x) { # (x = dots[[1L]])
       x |>
-        lapply(FUN = function(y) { # (y = x[[1L]])
+        lapply(FUN = \(y) { # (y = x[[1L]])
           y |> 
             nrow() |> 
             seq_len() |> 
-            lapply(FUN = function(i) y[i, , drop = TRUE])
+            lapply(FUN = \(i) y[i, , drop = TRUE])
         }) |> 
         .mapply(FUN = list, MoreArgs = NULL)
     }) |>
     .mapply(FUN = list, MoreArgs = NULL)
   
-  ppp. <- mapply(FUN = function(n, p) { # (p = pars[[1L]])
+  ppp. <- mapply(FUN = \(n, p) { # (p = pars[[1L]])
     c(p, list(n = n, win = win, element1 = FALSE)) |>
       do.call(what = .rppp) |>
       suppressMessages()
