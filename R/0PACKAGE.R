@@ -1,17 +1,9 @@
 
 
 #' 
-#' 
-#' 
-#' @import spatstat.random
 #' @import groupedHyperframe
+#' @import spatstat.random
 #' 
 '_PACKAGE'
-
-
-
-
-
-
 
 

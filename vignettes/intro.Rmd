@@ -19,7 +19,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette of package **`groupedHyperframe.random`** ([Github](https://github.com/tingtingzhan/groupedHyperframe.random)) documents the simulation of `groupedHyperframe` object.
+This vignette of package **`groupedHyperframe.random`** ([Github](https://github.com/tingtingzhan/groupedHyperframe.random)) documents the simulation of `superimpose`d `ppp.object` and the `groupedHyperframe` object.
 
 ## Note to Users
 
@@ -29,13 +29,13 @@ Examples in this vignette require that the `search` path has
 library(groupedHyperframe.random)
 ```
 
-## List of Terms and Abbreviations
+## Terms and Abbreviations
 
 ```{r echo = FALSE, results = 'asis'}
 c(
   '`coords`', '$x$- and $y$-coordinates', '`spatstat.geom:::ppp`',
   '`diag`', 'Diagonal matrix', '`base::diag`',
-  '`groupedHyperframe`', 'Grouped hyper data frame', 'https://github.com/tingtingzhan/groupedHyperframe',
+  '`groupedHyperframe`', 'Grouped hyper data frame', '`groupedHyperframe::as.groupedHyperframe`',
   '`hypercolumns`, `hyperframe`', '(Hyper columns of) hyper data frame', '`spatstat.geom::hyperframe`',
   '`marks`, `marked`', '(Having) mark values', '`spatstat.geom::is.marked`',
   '`ppp`, `ppp.object`', 'Point pattern', '`spatstat.geom::ppp.object`',
@@ -44,6 +44,7 @@ c(
   '`rmvnorm_`', 'Multivariate normal random variable', '`groupedHyperframe.random::rmvnorm_`',
   '`rnbinom`', 'Negative binomial random variable', '`stats::rnbinom`',
   '`rpoispp`', 'Poisson point pattern', '`spatstat.random::rpoispp`',
+  '`rStrauss`', 'Strauss process', '`spatstat.random::rStrauss`',
   '`superimpose`', 'Superimpose', '`spatstat.geom::superimpose`',
   '`var`, `cor`, `cov`', 'Variance, correlation, covariance', '`stats::var`, `stats::cor`, `stats::cov`'
 ) |>
@@ -111,7 +112,7 @@ Now consider two `superimpose`d Matern's cluster processes attached with a log-n
                 meanlog = c(3,5), sdlog = c(.4,.2)))
 ```
 
-We simulate for 3 subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances.  We also make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.
+We simulate for 3 subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances.  We also make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.  Each `matrix` of the subject-specific parameters has subjects on the rows, and `ppp`s to be `superimpose`d on the columns.
 ```{r}
 (p. = rmvnorm_(n = 3L, mu = p, Sigma = list(
   kappa = .2^2, scale = .05^2, mu = .5^2, 
@@ -124,15 +125,11 @@ We simulate for 3 subjects (e.g., patients). The subject-specific parameters dev
     }))
 ```
 
-We simulate one to four `ppp`s (e.g., medical images) for each subject,
+
+Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolumn, and column(s) of the grouping structure. One to four `ppp`s (e.g., medical images) are simulated for each subject.
 
 ```{r}
 set.seed(37); (n = sample.int(n = 4L, size = 3L, replace = TRUE)) 
-```
-
-Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolumn, and a column of subject index (currently hardcoded with the column name `f`).
-
-```{r}
 (r = p. |> 
   with.default(expr = {
     grouped_rppp(
@@ -141,25 +138,6 @@ Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolu
       rlnorm = list(meanlog = meanlog, sdlog = sdlog)
     )
   }))
-```
-
-
-
-```{r eval=FALSE, fig.width=4.5, dpi=150}
-spatstat.geom::plot.hyperframe(r)
-```
-
-## Re-create `spatstat.data::simba`
-
-```{r}
-control = .rppp(
-  n = 5L,
-  rpoispp = list(lambda = 80)
-)
-treat = .rppp(
-  n = 5L,
-  rStrauss = list(beta = 100, gamma = .5, R = .07)
-)
 ```
 
 
