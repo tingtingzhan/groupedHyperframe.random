@@ -19,7 +19,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 
 # Introduction
 
-This vignette of package **`groupedHyperframe.random`** ([Github](https://github.com/tingtingzhan/groupedHyperframe.random)) documents the simulation of `superimpose`d `ppp.object` and the `groupedHyperframe` object.
+This vignette of package **`groupedHyperframe.random`** ([Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents the simulation of `superimpose`d `ppp.object` and the `groupedHyperframe` object.
 
 ## Note to Users
 
@@ -54,6 +54,10 @@ c(
   as.data.frame.matrix() |> 
   kable()
 ```
+
+## Acknowledgement
+
+This work supported by NCI R01CA222847 ([I. Chervoneva](https://orcid.org/0000-0002-9104-4505), [T. Zhan](https://orcid.org/0000-0001-9971-4844), and [H. Rui](https://orcid.org/0000-0002-8778-261X)) and R01CA253977 (H. Rui and I. Chervoneva). 
 
 
 # Simulated Point Pattern

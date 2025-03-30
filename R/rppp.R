@@ -6,10 +6,6 @@
 #' To generate \link[spatstat.geom]{ppp.object}(s), 
 #' with none or one or multiple \link[spatstat.geom]{marks}.
 #' 
-#' @param n \link[base]{integer} scalar, 
-#' number of \link[spatstat.geom]{ppp.object}s to generate.
-#' Default `1L`.
-#' 
 #' @param ... see vignettes
 #' 
 #' @param dots (for internal use) \link[base]{list} of one or more named \link[base]{list}s.
@@ -18,14 +14,19 @@
 #' The second to last \link[base]{list}s, if available, specify the parameters to
 #' generate one or more \link[spatstat.geom]{marks}.
 #' 
-#' @param win \link[spatstat.geom]{owin} window
+#' @param win \link[spatstat.geom]{owin.object}
+#' 
+#' @param n \link[base]{integer} scalar, 
+#' number of \link[spatstat.geom]{ppp.object}s to generate.
+#' Default `1L`.
 #' 
 #' @param element1 \link[base]{logical} scalar, whether to return 
 #' a \link[spatstat.geom]{ppp.object}, 
 #' instead of a \link[base]{length}-`1L` \link[spatstat.geom]{solist},
 #' when `n==1L`. Default `TRUE`
 #' 
-#' @param envir \link[base]{environment}
+#' @param envir \link[base]{environment}, in which to \link[base]{eval}uate the `...` \link[rlang]{dyn-dots} argument.
+#' Default is the \link[base]{parent.frame}.
 #' 
 #' @return 
 #' Function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&element1`,
@@ -34,9 +35,9 @@
 #' 
 #' The returned \link[spatstat.geom]{ppp.object}(s) contain only 
 #' \eqn{x}- and \eqn{y}-\link[spatstat.geom]{coords}, 
-#' if only one \link[base]{list} is present in the `...` \link[rlang]{dyn-dots} argument.
+#' if only one \link[base]{call} is present in the `...` \link[rlang]{dyn-dots} argument.
 #' Otherwise, they contain one or more \link[spatstat.geom]{marks}
-#' according to the rest of the \link[base]{list}(s) in the `...` argument.
+#' according to the rest of the \link[base]{call}(s) in the `...` argument.
 #' 
 #' @note
 #' The name `rppp()` is too aggressive, which might be claimed in future by package \CRANpkg{spatstat.random}.
@@ -44,13 +45,13 @@
 #' 
 #' @keywords internal
 #' @importFrom cli cli_text col_blue col_magenta
-#' @importFrom spatstat.geom owin superimpose.ppp
+#' @importFrom spatstat.geom square superimpose.ppp
 #' @export
 .rppp <- function(
     ..., 
     dots,
+    win = square(),
     n = 1L, 
-    win = owin(xrange = c(-1,1), yrange = c(-1,1)),
     element1 = TRUE,
     envir = parent.frame()
 ) {
@@ -61,17 +62,20 @@
     nm <- names(ag)
     cl <- if (!length(nm)) ag else ag[!nzchar(nm)]
     
-    r <- cl |> vapply(FUN = \(i) (i[[1L]]) |> as.character(), FUN.VALUE = '')
-    names(cl) <- names(r) <- r # just easier for developer to debug
+    r <- cl |> 
+      vapply(FUN = \(i) {
+        (i[[1L]]) |> as.character()
+      }, FUN.VALUE = '')
+    names(cl) <- r # just easier for developer to debug
     dots <- cl |>
       lapply(FUN = \(i) { # (i = cl[[1L]])
         i[[1L]] <- quote(list)
         eval(i, envir = envir)
       })
-  } else {
-    r <- names(dots)
-    names(r) <- r # just easier for developer to debug
   }
+  
+  r <- names(dots)
+  names(r) <- r # just easier for developer to debug
   
   par0 <- dots |>
     unlist(recursive = FALSE) |>
@@ -127,4 +131,19 @@
   return(ret)
   
 } 
+
+
+
+if (FALSE) {
+  
+  stopifnot(identical(unit.square(), square(1)))
+  stopifnot(identical(unit.square(), square()))
+  
+  # has `win`
+  spatstat.random::rCauchy()
+  
+  # has `W`
+  spatstat.random::rCauchyHom
+  
+}
 

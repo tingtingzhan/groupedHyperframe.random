@@ -7,8 +7,8 @@
 .rppp(
   ...,
   dots,
+  win = square(),
   n = 1L,
-  win = owin(xrange = c(-1, 1), yrange = c(-1, 1)),
   element1 = TRUE,
   envir = parent.frame()
 )
@@ -22,18 +22,19 @@ generate the \eqn{x}- and \eqn{y}-\link[spatstat.geom]{coords}.
 The second to last \link[base]{list}s, if available, specify the parameters to
 generate one or more \link[spatstat.geom]{marks}.}
 
+\item{win}{\link[spatstat.geom]{owin.object}}
+
 \item{n}{\link[base]{integer} scalar,
 number of \link[spatstat.geom]{ppp.object}s to generate.
 Default \code{1L}.}
-
-\item{win}{\link[spatstat.geom]{owin} window}
 
 \item{element1}{\link[base]{logical} scalar, whether to return
 a \link[spatstat.geom]{ppp.object},
 instead of a \link[base]{length}-\code{1L} \link[spatstat.geom]{solist},
 when \code{n==1L}. Default \code{TRUE}}
 
-\item{envir}{\link[base]{environment}}
+\item{envir}{\link[base]{environment}, in which to \link[base]{eval}uate the \code{...} \link[rlang]{dyn-dots} argument.
+Default is the \link[base]{parent.frame}.}
 }
 \value{
 Function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&element1},
@@ -42,9 +43,9 @@ otherwise returns a \link[base]{length}-\code{n} \link[spatstat.geom]{solist}
 
 The returned \link[spatstat.geom]{ppp.object}(s) contain only
 \eqn{x}- and \eqn{y}-\link[spatstat.geom]{coords},
-if only one \link[base]{list} is present in the \code{...} \link[rlang]{dyn-dots} argument.
+if only one \link[base]{call} is present in the \code{...} \link[rlang]{dyn-dots} argument.
 Otherwise, they contain one or more \link[spatstat.geom]{marks}
-according to the rest of the \link[base]{list}(s) in the \code{...} argument.
+according to the rest of the \link[base]{call}(s) in the \code{...} argument.
 }
 \description{
 To generate \link[spatstat.geom]{ppp.object}(s),

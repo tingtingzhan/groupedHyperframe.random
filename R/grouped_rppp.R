@@ -7,19 +7,19 @@
 #' @param n \link[base]{integer} \link[base]{vector}, 
 #' numbers of \link[spatstat.geom]{ppp.object}s to generate for each set of parameters
 #' 
-#' @param win \link[spatstat.geom]{owin} window
+#' @param win \link[spatstat.geom]{owin.object}
 #' 
 #' @param envir \link[base]{environment}
 #' 
 #' @returns 
 #' Function [grouped_rppp()] returns a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}.
 #' 
-#' @importFrom spatstat.geom owin hyperframe
+#' @importFrom spatstat.geom square hyperframe
 #' @export
 grouped_rppp <- function(
     ..., 
     n, 
-    win = owin(xrange = c(-1,1), yrange = c(-1,1)), 
+    win = square(), 
     envir = parent.frame()
 ) {
   

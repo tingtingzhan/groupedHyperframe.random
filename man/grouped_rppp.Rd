@@ -4,12 +4,7 @@
 \alias{grouped_rppp}
 \title{Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}}
 \usage{
-grouped_rppp(
-  ...,
-  n,
-  win = owin(xrange = c(-1, 1), yrange = c(-1, 1)),
-  envir = parent.frame()
-)
+grouped_rppp(..., n, win = square(), envir = parent.frame())
 }
 \arguments{
 \item{...}{see examples, for now}
@@ -17,7 +12,7 @@ grouped_rppp(
 \item{n}{\link[base]{integer} \link[base]{vector},
 numbers of \link[spatstat.geom]{ppp.object}s to generate for each set of parameters}
 
-\item{win}{\link[spatstat.geom]{owin} window}
+\item{win}{\link[spatstat.geom]{owin.object}}
 
 \item{envir}{\link[base]{environment}}
 }
