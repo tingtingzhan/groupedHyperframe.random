@@ -2,25 +2,29 @@
 % Please edit documentation in R/rppp.R
 \name{.rppp}
 \alias{.rppp}
-\title{Generate (Marked) Point Pattern}
+\title{Simulate (Marked) Point Pattern}
 \usage{
 .rppp(
-  n = 1L,
   ...,
+  dots,
+  n = 1L,
   win = owin(xrange = c(-1, 1), yrange = c(-1, 1)),
-  element1 = TRUE
+  element1 = TRUE,
+  envir = parent.frame()
 )
 }
 \arguments{
-\item{n}{\link[base]{integer} scalar,
-number of \link[spatstat.geom]{ppp.object}s to generate.
-Default \code{1L}.}
+\item{...}{see vignettes}
 
-\item{...}{one or more named \link[base]{list}s.
+\item{dots}{(for internal use) \link[base]{list} of one or more named \link[base]{list}s.
 The first \link[base]{list} specifies the parameters to
 generate the \eqn{x}- and \eqn{y}-\link[spatstat.geom]{coords}.
 The second to last \link[base]{list}s, if available, specify the parameters to
 generate one or more \link[spatstat.geom]{marks}.}
+
+\item{n}{\link[base]{integer} scalar,
+number of \link[spatstat.geom]{ppp.object}s to generate.
+Default \code{1L}.}
 
 \item{win}{\link[spatstat.geom]{owin} window}
 
@@ -28,6 +32,8 @@ generate one or more \link[spatstat.geom]{marks}.}
 a \link[spatstat.geom]{ppp.object},
 instead of a \link[base]{length}-\code{1L} \link[spatstat.geom]{solist},
 when \code{n==1L}. Default \code{TRUE}}
+
+\item{envir}{\link[base]{environment}}
 }
 \value{
 Function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&element1},

@@ -39,6 +39,7 @@ c(
   '`hypercolumns`, `hyperframe`', '(Hyper columns of) hyper data frame', '`spatstat.geom::hyperframe`',
   '`marks`, `marked`', '(Having) mark values', '`spatstat.geom::is.marked`',
   '`ppp`, `ppp.object`', 'Point pattern', '`spatstat.geom::ppp.object`',
+  '`recycle`', 'Recycling', 'https://r4ds.had.co.nz/vectors.html#scalars-and-recycling-rules',  
   '`rlnorm`', 'Log normal random variable', '`stats::rlnorm`', 
   '`rMatClust`', 'Matern\'s cluster process', '`spatstat.random::rMatClust`',
   '`rmvnorm_`', 'Multivariate normal random variable', '`groupedHyperframe.random::rmvnorm_`',
@@ -63,7 +64,7 @@ Function `.rppp()` simulates `superimpose`d `ppp.object`s.
 
 Example below simulates a `coords`-only, un`marked`, two `superimpose`d Matern's cluster processes $(\kappa, \mu, s) = (10,8,.15)$ and $(5,4,.06)$.
 ```{r}
-r = .rppp(rMatClust = list(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
+set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
 # plot(r) # suppressed for aesthetics
 ```
 
@@ -73,13 +74,13 @@ Example below simulates two `superimpose`d `marked` `ppp`s,
 
 * Matern's cluster process $(\kappa,\mu,s) = (10,8,.15)$, attached with a log-normal `mark` $(\mu,\sigma)=(3,.4)$, and a negative-binomial `mark` $(r,p)=(4,.3)$.
 
-* Matern's cluster process $(\kappa,\mu,s) = (5,4,.06)$, attached with a log-normal `mark` $(\mu,\sigma)=(5,.2)$, and a negative-binomial `mark` $(r,p)=(6,.1)$.
+* Matern's cluster process $(\kappa,\mu,s) = (5,4,.06)$, attached with a log-normal `mark` $(\mu,\sigma)=(5,.2)$, and a negative-binomial `mark` $(r,p)=(4,.3)$. 
 
 ```{r}
-r1 = .rppp(
-  rMatClust = list(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), 
-  rlnorm = list(meanlog = c(3, 5), sdlog = c(.4, .2)),
-  rnbinom = list(size = c(4, 6), prob = c(.3, .1))
+set.seed(125); r1 = .rppp(
+  rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), 
+  rlnorm(meanlog = c(3, 5), sdlog = c(.4, .2)),
+  rnbinom(size = 4, prob = .3) # short parameter recycled
 )
 ```
 
@@ -90,10 +91,10 @@ Example below simulates two `superimpose`d `marked` `ppp`s,
 * Poisson point pattern $\lambda=6$, attached with a log-normal `mark` $(\mu,\sigma)=(5,.2)$, and a negative-binomial `mark` $(r,p)=(6,.1)$.
 
 ```{r}
-r2 = .rppp(
-  rpoispp = list(lambda = c(3, 6)),
-  rlnorm = list(meanlog = c(3, 5), sdlog = c(.4, .2)),
-  rnbinom = list(size = c(4, 6), prob = c(.3, .1))
+set.seed(62); r2 = .rppp(
+  rpoispp(lambda = c(3, 6)),
+  rlnorm(meanlog = c(3, 5), sdlog = c(.4, .2)),
+  rnbinom(size = c(4, 6), prob = c(.3, .1))
 )
 ```
 
@@ -114,7 +115,7 @@ Now consider two `superimpose`d Matern's cluster processes attached with a log-n
 
 We simulate for 3 subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances.  We also make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.  Each `matrix` of the subject-specific parameters has subjects on the rows, and `ppp`s to be `superimpose`d on the columns.
 ```{r}
-(p. = rmvnorm_(n = 3L, mu = p, Sigma = list(
+set.seed(39); (p. = rmvnorm_(n = 3L, mu = p, Sigma = list(
   kappa = .2^2, scale = .05^2, mu = .5^2, 
   meanlog = .1^2, sdlog = .01^2)) |> 
     within.list(expr = {
@@ -130,12 +131,12 @@ Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolu
 
 ```{r}
 set.seed(37); (n = sample.int(n = 4L, size = 3L, replace = TRUE)) 
-(r = p. |> 
+set.seed(76); (r = p. |> 
   with.default(expr = {
     grouped_rppp(
-      n = n,
-      rMatClust = list(kappa = kappa, scale = scale, mu = mu), 
-      rlnorm = list(meanlog = meanlog, sdlog = sdlog)
+      rMatClust(kappa = kappa, scale = scale, mu = mu), 
+      rlnorm(meanlog = meanlog, sdlog = sdlog),
+      n = n
     )
   }))
 ```

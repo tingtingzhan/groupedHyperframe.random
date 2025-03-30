@@ -1,6 +1,6 @@
 
 
-#' @title Generate (Marked) Point Pattern
+#' @title Simulate (Marked) Point Pattern
 #' 
 #' @description
 #' To generate \link[spatstat.geom]{ppp.object}(s), 
@@ -10,7 +10,9 @@
 #' number of \link[spatstat.geom]{ppp.object}s to generate.
 #' Default `1L`.
 #' 
-#' @param ... one or more named \link[base]{list}s.
+#' @param ... see vignettes
+#' 
+#' @param dots (for internal use) \link[base]{list} of one or more named \link[base]{list}s.
 #' The first \link[base]{list} specifies the parameters to 
 #' generate the \eqn{x}- and \eqn{y}-\link[spatstat.geom]{coords}.
 #' The second to last \link[base]{list}s, if available, specify the parameters to
@@ -22,6 +24,8 @@
 #' a \link[spatstat.geom]{ppp.object}, 
 #' instead of a \link[base]{length}-`1L` \link[spatstat.geom]{solist},
 #' when `n==1L`. Default `TRUE`
+#' 
+#' @param envir \link[base]{environment}
 #' 
 #' @return 
 #' Function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&element1`,
@@ -43,21 +47,37 @@
 #' @importFrom spatstat.geom owin superimpose.ppp
 #' @export
 .rppp <- function(
-    n = 1L, 
     ..., 
+    dots,
+    n = 1L, 
     win = owin(xrange = c(-1,1), yrange = c(-1,1)),
-    element1 = TRUE
+    element1 = TRUE,
+    envir = parent.frame()
 ) {
   
-  dots <- list(...)
-  dots <- dots[lengths(dots, use.names = FALSE) > 0L]
+  if (missing(dots)) {
+    cl. <- match.call() |> as.list.default()
+    ag <- cl.[-1L]
+    nm <- names(ag)
+    cl <- if (!length(nm)) ag else ag[!nzchar(nm)]
+    
+    r <- cl |> vapply(FUN = \(i) (i[[1L]]) |> as.character(), FUN.VALUE = '')
+    names(cl) <- names(r) <- r # just easier for developer to debug
+    dots <- cl |>
+      lapply(FUN = \(i) { # (i = cl[[1L]])
+        i[[1L]] <- quote(list)
+        eval(i, envir = envir)
+      })
+  } else {
+    r <- names(dots)
+    names(r) <- r # just easier for developer to debug
+  }
   
-  r <- names(dots)
-  names(r) <- r # just easier for developer to debut
-  
-  par0 <- dots |> unlist(recursive = FALSE) |> as.data.frame.list() # recycle length
+  par0 <- dots |>
+    unlist(recursive = FALSE) |>
+    as.data.frame.list() # recycle parameter between all `r`s
   npar <- .row_names_info(par0, type = 2L)
-
+  
   par <- r |> 
     lapply(FUN = \(i) { # (i = 'rStrauss')
       z <- par0[startsWith(names(par0), prefix = i)]
@@ -94,7 +114,9 @@
   } 
   
   ret <- replicate(n = n, expr = {
-    do.call(what = superimpose.ppp, args = lapply(seq_len(npar), FUN = fn))
+    seq_len(npar) |>
+      lapply(FUN = fn) |> 
+      do.call(what = superimpose.ppp)
   }, simplify = FALSE)
   
   if ((n == 1L) && element1) return(ret[[1L]])
@@ -105,12 +127,4 @@
   return(ret)
   
 } 
-
-
-
-
-
-# @seealso 
-# Avoid name clash \link[stats]{window}.
-
 

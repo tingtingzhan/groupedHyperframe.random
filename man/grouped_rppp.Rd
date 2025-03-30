@@ -2,21 +2,28 @@
 % Please edit documentation in R/grouped_rppp.R
 \name{grouped_rppp}
 \alias{grouped_rppp}
-\title{Batch Process of Function \link{.rppp}}
+\title{Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}}
 \usage{
-grouped_rppp(n, ..., win = owin(xrange = c(-1, 1), yrange = c(-1, 1)))
+grouped_rppp(
+  ...,
+  n,
+  win = owin(xrange = c(-1, 1), yrange = c(-1, 1)),
+  envir = parent.frame()
+)
 }
 \arguments{
+\item{...}{see examples, for now}
+
 \item{n}{\link[base]{integer} \link[base]{vector},
 numbers of \link[spatstat.geom]{ppp.object}s to generate for each set of parameters}
 
-\item{...}{see examples, for now}
-
 \item{win}{\link[spatstat.geom]{owin} window}
+
+\item{envir}{\link[base]{environment}}
 }
 \value{
-Function \code{\link[=grouped_rppp]{grouped_rppp()}} returns a \link[spatstat.geom]{hyperframe}.
+Function \code{\link[=grouped_rppp]{grouped_rppp()}} returns a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}.
 }
 \description{
-Batch Process of Function \link{.rppp}
+Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}
 }
