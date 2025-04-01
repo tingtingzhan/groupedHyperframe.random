@@ -38,6 +38,7 @@ c(
   '`groupedHyperframe`', 'Grouped hyper data frame', '`groupedHyperframe::as.groupedHyperframe`',
   '`hypercolumns`, `hyperframe`', '(Hyper columns of) hyper data frame', '`spatstat.geom::hyperframe`',
   '`marks`, `marked`', '(Having) mark values', '`spatstat.geom::is.marked`',
+  '`pmax`', 'Parallel maxima', '`base::pmax`',
   '`ppp`, `ppp.object`', 'Point pattern', '`spatstat.geom::ppp.object`',
   '`recycle`', 'Recycling', 'https://r4ds.had.co.nz/vectors.html#scalars-and-recycling-rules',  
   '`rlnorm`', 'Log normal random variable', '`stats::rlnorm`', 
