@@ -22,3 +22,4 @@ Function \code{\link[=grouped_rppp]{grouped_rppp()}} returns a \link[groupedHype
 \description{
 Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}
 }
+\keyword{internal}

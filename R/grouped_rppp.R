@@ -14,6 +14,7 @@
 #' @returns 
 #' Function [grouped_rppp()] returns a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}.
 #' 
+#' @keywords internal
 #' @importFrom spatstat.geom square hyperframe
 #' @export
 grouped_rppp <- function(

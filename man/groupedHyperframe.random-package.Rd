@@ -6,7 +6,13 @@
 \alias{groupedHyperframe.random-package}
 \title{groupedHyperframe.random: Simulated Grouped Hyper Data Frame}
 \description{
-Simulated Grouped Hyper Data Frame.
+To simulate superimposed (marked) point patterns. To simulate grouped hyper data frame.
+}
+\note{
+Help files of individual functions are intentionally suppressed in the \code{pdf} manual.
+Users are encouraged to get started with
+
+\code{vignette('intro', package = 'groupedHyperframe.random')}
 }
 \author{
 \strong{Maintainer}: Tingting Zhan \email{tingtingzhan@gmail.com} (\href{https://orcid.org/0000-0001-9971-4844}{ORCID})

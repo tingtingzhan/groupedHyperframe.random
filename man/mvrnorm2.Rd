@@ -23,7 +23,7 @@ a scalar, a \link[base]{vector} or a \link[base]{matrix},
 Function \link{mvrnorm2} returns a \link[base]{double} \link[base]{matrix}.
 }
 \description{
-To accomondate more types of \code{Sigma} in function \link[MASS]{mvrnorm}.
+To accommodate more types of \code{Sigma} in function \link[MASS]{mvrnorm}.
 }
 \details{
 Argument of parameter \code{Sigma} could be

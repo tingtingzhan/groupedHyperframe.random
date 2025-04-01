@@ -37,7 +37,7 @@ rmvnorm_ <- function(n, mu, Sigma, ...) {
 #' @title Expand Types of `Sigma` in \link[MASS]{mvrnorm}
 #' 
 #' @description
-#' To accomondate more types of `Sigma` in function \link[MASS]{mvrnorm}.
+#' To accommodate more types of `Sigma` in function \link[MASS]{mvrnorm}.
 #' 
 #' @param n \link[base]{integer} scalar, sample size
 #' 
