@@ -33,6 +33,8 @@ library(groupedHyperframe.random)
 
 ```{r echo = FALSE, results = 'asis'}
 c(
+  '', 'Forward pipe operator', '`?base::pipeOp` introduced in `R` 4.1.0', 
+  '`CRAN`, `R`', 'The Comprehensive R Archive Network', 'https://cran.r-project.org',
   '`coords`', '$x$- and $y$-coordinates', '`spatstat.geom:::ppp`',
   '`diag`', 'Diagonal matrix', '`base::diag`',
   '`groupedHyperframe`', 'Grouped hyper data frame', '`groupedHyperframe::as.groupedHyperframe`',
@@ -43,10 +45,10 @@ c(
   '`recycle`', 'Recycling', 'https://r4ds.had.co.nz/vectors.html#scalars-and-recycling-rules',  
   '`rlnorm`', 'Log normal random variable', '`stats::rlnorm`', 
   '`rMatClust`', 'Matern\'s cluster process', '`spatstat.random::rMatClust`',
-  '`rmvnorm_`', 'Multivariate normal random variable', '`groupedHyperframe.random::rmvnorm_`',
+  '`rmvnorm_`', 'Multivariate normal random variable', '`groupedHyperframe.random::rmvnorm_`; `MASS::mvrnorm`',
   '`rnbinom`', 'Negative binomial random variable', '`stats::rnbinom`',
   '`rpoispp`', 'Poisson point pattern', '`spatstat.random::rpoispp`',
-  '`rStrauss`', 'Strauss process', '`spatstat.random::rStrauss`',
+#  '`rStrauss`', 'Strauss process', '`spatstat.random::rStrauss`',
   '`superimpose`', 'Superimpose', '`spatstat.geom::superimpose`',
   '`var`, `cor`, `cov`', 'Variance, correlation, covariance', '`stats::var`, `stats::cor`, `stats::cov`'
 ) |>
@@ -63,7 +65,7 @@ This work is supported by NCI R01CA222847 ([I. Chervoneva](https://orcid.org/000
 
 # Simulated Point Pattern
 
-Function `.rppp()` simulates `superimpose`d `ppp.object`s.  
+Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of random point pattern and distribution of `marks`. 
 
 ## Simulated un`marked` Point Pattern
 
@@ -85,7 +87,7 @@ Example below simulates two `superimpose`d `marked` `ppp`s,
 set.seed(125); r1 = .rppp(
   rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), 
   rlnorm(meanlog = c(3, 5), sdlog = c(.4, .2)),
-  rnbinom(size = 4, prob = .3) # short parameter recycled
+  rnbinom(size = 4, prob = .3) # shorter parameter recycled
 )
 ```
 
@@ -118,7 +120,7 @@ Now consider two `superimpose`d Matern's cluster processes attached with a log-n
                 meanlog = c(3,5), sdlog = c(.4,.2)))
 ```
 
-We simulate for 3 subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances.  We also make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.  Each `matrix` of the subject-specific parameters has subjects on the rows, and `ppp`s to be `superimpose`d on the columns.
+We simulate for 3 subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution with variance-covariance matrix $\Sigma$.  The matrix $\Sigma$ may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances.  We also make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matern's cluster processes, and $\sigma>0$ for log-normal distribution.  Each `matrix` of the subject-specific parameters has the subjects on the rows, and the parameters of the `ppp`s to be `superimpose`d on the columns.
 ```{r}
 set.seed(39); (p. = rmvnorm_(n = 3L, mu = p, Sigma = list(
   kappa = .2^2, scale = .05^2, mu = .5^2, 
@@ -131,11 +133,14 @@ set.seed(39); (p. = rmvnorm_(n = 3L, mu = p, Sigma = list(
     }))
 ```
 
-
-Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolumn, and column(s) of the grouping structure. One to four `ppp`s (e.g., medical images) are simulated for each subject.
+We simulate one to four `ppp`s (e.g., medical images) per subject.
 
 ```{r}
 set.seed(37); (n = sample.int(n = 4L, size = 3L, replace = TRUE)) 
+```
+
+Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolumn, and one-or-more columns of the grouping structure. 
+```{r}
 set.seed(76); (r = p. |> 
   with.default(expr = {
     grouped_rppp(

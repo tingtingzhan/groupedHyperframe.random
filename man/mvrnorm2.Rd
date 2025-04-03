@@ -20,7 +20,7 @@ a scalar, a \link[base]{vector} or a \link[base]{matrix},
 \item{...}{additional parameter of function \link[MASS]{mvrnorm}}
 }
 \value{
-Function \link{mvrnorm2} returns a \link[base]{double} \link[base]{matrix}.
+Function \code{\link[=mvrnorm2]{mvrnorm2()}} returns a \link[base]{double} \link[base]{matrix}.
 }
 \description{
 To accommodate more types of \code{Sigma} in function \link[MASS]{mvrnorm}.

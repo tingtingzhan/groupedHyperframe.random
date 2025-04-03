@@ -63,7 +63,7 @@ rmvnorm_ <- function(n, mu, Sigma, ...) {
 #' \item{\link[base]{matrix}}{`Sigma` is used as \eqn{\Sigma}}}
 #' 
 #' @returns 
-#' Function [mvrnorm2] returns a \link[base]{double} \link[base]{matrix}.
+#' Function [mvrnorm2()] returns a \link[base]{double} \link[base]{matrix}.
 #' 
 #' @note
 #' Workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than `?mvtnorm::rmvnorm`.

@@ -6,7 +6,7 @@
 \alias{groupedHyperframe.random-package}
 \title{groupedHyperframe.random: Simulated Grouped Hyper Data Frame}
 \description{
-To simulate superimposed (marked) point patterns. To simulate grouped hyper data frame.
+An intuitive interface to simulate (1) superimposed (marked) point patterns with vectorized parameterization of random point pattern and distribution of marks; and (2) grouped hyper data frame based on population parameters and subject-specific random effects.
 }
 \note{
 Help files of individual functions are intentionally suppressed in the \code{pdf} manual.
