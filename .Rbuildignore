@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 vignettes/rsconnect
 ^CRAN-SUBMISSION$
+vignettes/.*_files
+vignettes/.*.html

@@ -1,33 +1,60 @@
 ---
 title: "Simulated Grouped Hyper Data Frame"
-output: rmarkdown::html_vignette
 author: Tingting Zhan
+format: 
+  html:
+    page-layout: full
+    html-math-method: katex
+toc: true
+toc-location: left
+toc-depth: 4
+toc-title: ''
+editor: visual
 vignette: >
   %\VignetteIndexEntry{intro}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-library(knitr)
-opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-options(rmarkdown.html_vignette.check_title = FALSE)
-```
 
 # Introduction
 
-This vignette of package **`groupedHyperframe.random`** ([Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents the simulation of `superimpose`d `ppp.object` and the `groupedHyperframe` object.
+This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random), [Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents the simulation of `superimpose`d `ppp.object` and the `groupedHyperframe` object.
+
+## Prerequisite
+
+New features are first implemented on [Github](https://github.com/tingtingzhan/groupedHyperframe.random).
+
+```{r}
+#| warning: false
+#| eval: false
+devtools::install_github('tingtingzhan/groupedHyperframe.random')
+```
+
+And eventually make their way to [`CRAN`](https://CRAN.R-project.org/package=groupedHyperframe.random).
+
+```{r}
+#| warning: false
+#| eval: false
+utils::install.packages('groupedHyperframe.random')
+```
+
 
 ## Note to Users
 
 Examples in this vignette require that the `search` path has
 
-```{r setup}
+```{r}
+#| message: false
 library(groupedHyperframe.random)
 ```
+
+```{r}
+#| echo: false
+library(knitr) # for tables in this vignette
+#options(mc.cores = 1L) # for CRAN submission
+```
+
 
 ## Terms and Abbreviations
 
@@ -35,7 +62,7 @@ library(groupedHyperframe.random)
 c(
   '', 'Forward pipe operator', '`?base::pipeOp` introduced in `R` 4.1.0', 
   '`CRAN`, `R`', 'The Comprehensive R Archive Network', 'https://cran.r-project.org',
-  '`coords`', '$x$- and $y$-coordinates', '`spatstat.geom:::ppp`',
+  '`coords`', '$x$- and $y$-coordinates', '`spatstat.geom:::coords`',
   '`diag`', 'Diagonal matrix', '`base::diag`',
   '`groupedHyperframe`', 'Grouped hyper data frame', '`groupedHyperframe::as.groupedHyperframe`',
   '`hypercolumns`, `hyperframe`', '(Hyper columns of) hyper data frame', '`spatstat.geom::hyperframe`',
@@ -114,7 +141,9 @@ spatstat.geom::superimpose(r1, r2)
 
 # Simulated `groupedHyperframe`
 
-Now consider two `superimpose`d Matern's cluster processes attached with a log-normal `mark`. The population parameters are
+Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects.
+
+Consider two `superimpose`d Matern's cluster processes attached with a log-normal `mark`. The population parameters are
 ```{r}
 (p = data.frame(kappa = c(3,2), scale = c(.4,.2), mu = c(10,5), 
                 meanlog = c(3,5), sdlog = c(.4,.2)))
