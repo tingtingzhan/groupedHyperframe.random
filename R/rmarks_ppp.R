@@ -23,6 +23,7 @@
 #' rmarks_ppp(rlnorm)
 #' rmarks_ppp('rnbinom')
 #' 
+#' library(spatstat.random)
 #' plot(pp <- rpoispp(lambda = 100))
 #' 
 #' plot(pp |>

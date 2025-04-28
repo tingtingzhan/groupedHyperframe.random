@@ -28,6 +28,7 @@ Create random \code{marks} generation \emph{\strong{\link[base]{function}}} for 
 rmarks_ppp(rlnorm)
 rmarks_ppp('rnbinom')
 
+library(spatstat.random)
 plot(pp <- rpoispp(lambda = 100))
 
 plot(pp |>
