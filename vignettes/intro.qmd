@@ -61,7 +61,7 @@ library(knitr) # for tables in this vignette
 ## Terms and Abbreviations
 
 | Term / Abbreviation | Description |
-|------------------------------------|------------------------------------|
+|----|----|
 | [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since `R` 4.1.0 |
 | `CRAN`, `R` | [The Comprehensive R Archive Network](https://cran.r-project.org) |
 | [`coords`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/coords.html) | $x$- and $y$-coordinates, from package **`spatstat.geom`** [@spatstat05] |
