@@ -24,11 +24,44 @@ vignette: >
 
 # Introduction
 
-This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random), [Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents the simulation of `superimpose`d (marked) point-pattern `ppp.object` and grouped hyper data frame `groupedHyperframe`.
+This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random), [Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents 
+
+-   the simulation of `superimpose`d (marked) point-pattern `ppp.object` 
+-   the simulation of grouped hyper data frame `groupedHyperframe`.
+
+R terminology might be different from that of mathematics and statistics. Please refer to Appendix @sec-terms for explanation and reference of the terms and abbreviations used in this vignette.
+
+Package **`groupedHyperframe.random`** `Enhances` the package **`spatstat.random`** (developer version `r packageVersion('spatstat.random')`).
+
+Package **`groupedHyperframe.random`** `Imports` packages
+
+-   **`cli`** [@cli, version `r packageVersion('cli')`], for attractive **c**ommand **l**ine **i**nterfaces
+-   `r knitr::asis_output('\U1f5dd')` **`MASS`** [@MASS, version `r packageVersion('MASS')`], key dependency, for function `MASS::mvrnorm`
+-   `r knitr::asis_output('\U1f5dd')` **`spatstat.geom`** (developer version `r packageVersion('spatstat.geom')`), @spatstat15, key dependency, for operations on `ppp.object` and `marks`
+-   `r knitr::asis_output('\U1f5dd')` **`spatstat.random`** (developer version `r packageVersion('spatstat.random')`), @spatstat15, key dependency, for simulation of `ppp.object`
+-   `r knitr::asis_output('\U1f5dd')` **`groupedHyperframe`** [@groupedHyperframe, version `r packageVersion('groupedHyperframe')`], key dependency, for grouped hyper data frame
 
 ## Prerequisite
 
-New features are first implemented on [Github](https://github.com/tingtingzhan/groupedHyperframe.random).
+Package **`groupedHyperframe.random`** requires R version 4.5.0 (released 2025-04-11) or higher. [RStudio](https://posit.co/download/rstudio-desktop/) is not required, but highly recommended. This vignette is generated under `r R.version$version.string` using packages **`knitr`** [@knitr, version `r packageVersion('knitr')`], **`quarto`** [@quarto, version `r packageVersion('quarto')`], **`rmarkdown`** [@rmarkdown, version `r packageVersion('rmarkdown')`], and the development versions of the **`spatstat`** family of packages [@spatstat15; @spatstat05].
+
+```{r}
+#| label: prerequisite
+#| warning: false
+#| eval: false
+remotes::install_github('spatstat/spatstat', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.data', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.explore', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.geom', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.linnet', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.model', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.random', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.sparse', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.univar', upgrade = 'always')
+remotes::install_github('spatstat/spatstat.utils', upgrade = 'always')
+```
+
+Experimental (and maybe unstable) features are released *extremely frequently* to [Github](https://github.com/tingtingzhan/groupedHyperframe.random). [Active developers should use the Github version; suggestions and bug reports are welcome!]{style="background-color: #FFFF00"}
 
 ```{r}
 #| warning: false
@@ -36,13 +69,14 @@ New features are first implemented on [Github](https://github.com/tingtingzhan/g
 remotes::install_github('tingtingzhan/groupedHyperframe.random')
 ```
 
-And eventually make their way to [`CRAN`](https://CRAN.R-project.org/package=groupedHyperframe.random).
+Stable releases to [CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random) are typically updated every 2 to 3 months, or when the authors have an upcoming manuscript in the peer-reviewing process.
 
 ```{r}
 #| warning: false
 #| eval: false
-utils::install.packages('groupedHyperframe.random')
+utils::install.packages('groupedHyperframe.random') # Developers, do NOT use!!
 ```
+
 
 ## Note to Users
 
@@ -160,8 +194,8 @@ set.seed(76); (r = p. |>
 
 # Appendix
 
-## Terms and Abbreviations
-
+## Terms & Abbreviations {#sec-terms}
+ 
 | Term / Abbreviation | Description |
 |------------------------------------|------------------------------------|
 | [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since `R` 4.1.0 |
