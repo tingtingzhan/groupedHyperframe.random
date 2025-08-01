@@ -43,12 +43,13 @@
   if (length(value) != npoints.ppp(x)) stop('length not match')
   
   switch(markformat.ppp(x), none = {
-    # before 2025-08-01
-    # x$markformat <- 'vector'
-    # x$marks <- value
+    x$markformat <- 'vector'
+    x$marks <- value
     # tzh's \pkg{groupedHyperframe} requires ncol-1 'data.frame' marks
-    x$markformat <- 'dataframe'
-    x$marks <- data.frame(m1 = value)
+    # this fix is useless ...
+    # x$markformat <- 'dataframe'
+    # x$marks <- data.frame(m1 = value)
+    # see tzh's note on ?spatstat.geom::superimpose.ppp hahaha
     
   }, vector = {
     x$markformat <- 'dataframe'

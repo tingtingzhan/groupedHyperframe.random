@@ -121,6 +121,9 @@
     seq_len(npar) |>
       lapply(FUN = fn) |> 
       do.call(what = superimpose.ppp)
+    # ?spatstat.geom::superimpose.ppp does not respect ncol-1 'dataframe' marks!! i.e. it forces `drop`
+    # as of packageVersion('spatstat.geom') 3.5.0.3
+    # the last line of ?spatstat.geom::superimpose.ppp does not even have `drop` parameter hhahah
   }, simplify = FALSE)
   
   if ((n == 1L) && element1) return(ret[[1L]])
