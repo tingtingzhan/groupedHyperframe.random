@@ -43,8 +43,12 @@
   if (length(value) != npoints.ppp(x)) stop('length not match')
   
   switch(markformat.ppp(x), none = {
-    x$markformat <- 'vector'
-    x$marks <- value
+    # before 2025-08-01
+    # x$markformat <- 'vector'
+    # x$marks <- value
+    # tzh's \pkg{groupedHyperframe} requires ncol-1 'data.frame' marks
+    x$markformat <- 'dataframe'
+    x$marks <- data.frame(m1 = value)
     
   }, vector = {
     x$markformat <- 'dataframe'
