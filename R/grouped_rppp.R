@@ -51,9 +51,9 @@ grouped_rppp <- function(
     list(dots = p, n = n, win = win, element1 = FALSE) |>
       do.call(what = .rppp) |>
       suppressMessages()
-  }, p = pars, n = n) |>
+  }, p = pars, n = n, SIMPLIFY = FALSE) |>
     unlist(recursive = FALSE)
-  
+
   g1_ <- seq_along(n)
   
   ret <- hyperframe(
