@@ -7,7 +7,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Encoding: UTF-8
 License: GPL-2
-Depends: R (>= 4.5)
 Language: en-US
 Authors@R: c(person(given = 'Tingting', family =
       'Zhan', role = c('aut', 'cre'), email =
@@ -16,6 +15,7 @@ Authors@R: c(person(given = 'Tingting', family =
       family = 'Chervoneva', role = c('aut'), email =
       'Inna.Chervoneva@jefferson.edu', comment =
       c(ORCID = '0000-0002-9104-4505')))
-Imports: cli, MASS, spatstat.geom, spatstat.random, groupedHyperframe
+Depends: R (>= 4.5), groupedHyperframe
+Imports: cli, MASS, spatstat.geom, spatstat.random
 Suggests: knitr, quarto, rmarkdown, spatstat.data
 VignetteBuilder: quarto

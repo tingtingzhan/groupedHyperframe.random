@@ -151,6 +151,8 @@ spatstat.geom::superimpose(r1, r2)
 
 Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects.
 
+## with Matérn's cluster processes {#sec-groupedHyperframe_Matern}
+
 Consider two `superimpose`d Matérn's cluster processes, each with one log-normal `mark`. The population parameters are
 
 -   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (3,10,.4)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$
@@ -159,7 +161,7 @@ Consider two `superimpose`d Matérn's cluster processes, each with one log-norma
 We simulate for three (3) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviations `sd` $\sigma$, or the variance-covariance matrix `Sigma` $\Sigma$. The standard deviations `sd` may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances. In this example we have $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$. We must make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matérn's cluster processes, and $\sigma>0$ for log-normal distribution. Each `matrix` of the subject-specific parameters has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
 
 ```{r}
-set.seed(39); p = mapply(
+set.seed(39); p_Matern = mapply(
   FUN = mvrnorm2, 
   mu = list(kappa = c(3,2), mu = c(10,5), scale = c(.4,.2), meanlog = c(3,5), sdlog = c(.4,.2)), 
   sd = list(kappa = .2, mu = .5, scale = .05, meanlog = .1, sdlog = .01), 
@@ -177,7 +179,7 @@ set.seed(39); p = mapply(
 ```{r}
 #| code-fold: true
 #| code-summary: Subject-specific parameters
-p
+p_Matern
 ```
 
 We simulate one (1) to four (4) `ppp.object`s (e.g., medical images) for each of the three (3) subjects (e.g., patients).
@@ -189,7 +191,7 @@ set.seed(37); (n = sample(x = 1:4, size = 3L, replace = TRUE))
 Function `grouped_rppp()` simulates a `groupedHyperframe` with a `ppp`-hypercolumn, and one-or-more columns of the grouping structure.
 
 ```{r}
-set.seed(76); r = p |> 
+set.seed(76); r_Matern = p_Matern |> 
   with.default(expr = {
     grouped_rppp(
       rMatClust(kappa = kappa, scale = scale, mu = mu), 
@@ -200,15 +202,88 @@ set.seed(76); r = p |>
 ```
 
 ```{r}
-r
+#| code-fold: true
+#| code-summary: Simulated `groupedHyperframe` *`r_Matern`*
+r_Matern
 ```
+
+## with Poisson point pattern
+
+Consider two `superimpose`d Poisson point pattern, each with one negative-binomial `mark`. The population parameters are
+
+-   Poisson point pattern $\lambda_1=3$, with a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
+-   Poisson point pattern $\lambda_2=6$, with a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
+
+We also simulate for three (3) subjects (e.g., patients). Let the standard deviation for each parameters be $\sigma_\lambda=.1$, $\sigma_r=.2$ and $\sigma_p=.05$. We must make sure that all subject-specific parameters satisfy that $\lambda>0$ for Poisson point pattern, and $r>0$, $0<p<1$ for negative-binomial distribution.
+
+```{r}
+set.seed(39); p_Poisson = mapply(
+  FUN = mvrnorm2, 
+  mu = list(lambda = c(3, 6), size = c(4, 6), prob = c(.3, .1)), 
+  sd = list(lambda = .1, size = .2, prob = .05), 
+  MoreArgs = list(n = 3L), 
+  SIMPLIFY = FALSE
+) |>
+  within.list(expr = {
+    lambda = pmax(lambda, .Machine$double.eps)
+    size = pmax(size, .Machine$double.eps)
+    prob = pmin(pmax(prob, .Machine$double.eps), 1 - .Machine$double.eps)
+  })
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: Subject-specific parameters
+p_Poisson
+```
+
+We simulate one (1) to four (4) `ppp.object`s (e.g., medical images) for each of the three (3) subjects (e.g., patients), using the same grouping size as in 
+@sec-groupedHyperframe_Matern.
+
+```{r}
+set.seed(76); r_Poisson = p_Poisson |> 
+  with.default(expr = {
+    grouped_rppp(
+      rpoispp(lambda = lambda),
+      rnbinom(size = size, prob = prob),
+      n = n
+    )
+  })
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: Simulated `groupedHyperframe` *`r_Poisson`*
+r_Poisson
+```
+
+## Superimpose
+
+Users may use the S3 method dispatch `groupedHyperframe::superimpose.groupedHyperframe()` to superimpose multiple simulated `groupedHyperframe`s  with different point patterns.
+Users are encouraged to read the vignette (CRAN, [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe)) of package **`groupedHyperframe`**, Appendix section *On `hyperframe`* for more details.
+
+```{r}
+r = superimpose.groupedHyperframe(r_Matern, r_Poisson)
+```
+
+User may check the return of superimpose.
+
+```{r}
+#| fig-show: hide
+#| code-fold: true
+#| code-summary: Plot suppressed to reduce vignette size
+plot(r_Matern$ppp[[1L]])
+plot(r_Poisson$ppp[[1L]])
+plot(r$ppp[[1L]])
+```
+
 
 # Appendix
 
 ## Terms & Abbreviations {#sec-terms}
 
 | Term / Abbreviation | Description |
-|----|----|
+|------------------------------------|------------------------------------|
 | [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since `R` 4.1.0 |
 | `CRAN`, `R` | [The Comprehensive R Archive Network](https://cran.r-project.org) |
 | [`coords`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/coords.html) | $x$- and $y$-coordinates, from package **`spatstat.geom`** [@spatstat05] |
