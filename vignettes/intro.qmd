@@ -67,14 +67,13 @@ remotes::install_github('spatstat/spatstat.univar', upgrade = 'always')
 remotes::install_github('spatstat/spatstat.utils', upgrade = 'always')
 ```
 
-Experimental (and maybe unstable) features are released *extremely frequently* to [Github](https://github.com/tingtingzhan/groupedHyperframe.random). [Active developers should use the Github version; suggestions and bug reports are welcome!]{style="background-color: #FFFF00"}
+Experimental (and maybe unstable) features are released *extremely frequently* to [Github](https://github.com/tingtingzhan/groupedHyperframe.random). [Active developers should use the Github version; suggestions and bug reports are welcome!]{style="background-color: #FFFF00"} Stable releases to [CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random) are typically updated every 2 to 3 months, or when the authors have an upcoming manuscript in the peer-reviewing process.
 
 ```{r}
 #| eval: false
 remotes::install_github('tingtingzhan/groupedHyperframe.random')
 ```
 
-Stable releases to [CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random) are typically updated every 2 to 3 months, or when the authors have an upcoming manuscript in the peer-reviewing process.
 
 ```{r}
 #| eval: false
@@ -105,12 +104,9 @@ This work is supported by National Institutes of Health, U.S. Department of Heal
 
 # Simulated Point Pattern
 
-Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of random point pattern and distribution of `marks`. Function `.rppp()` returns a `ppp.object`.
+Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of the random point pattern and the distribution of `marks`. Function `.rppp()` returns a `ppp.object`.
 
-Example below simulates a `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes 
-
--   $(\kappa_1, \mu_1, s_1) = (10,8,.15)$
--   $(\kappa_2, \mu_2, s_2) = (5,4,.06)$
+Example below simulates a `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$.
 
 ```{r}
 set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
@@ -119,7 +115,6 @@ set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15
 Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
 -   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
-
 -   Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (5,4,.06)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
 
 ```{r}
@@ -134,7 +129,6 @@ set.seed(125); r1 = .rppp(
 Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
 -   Poisson point pattern $\lambda_1=3$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
-
 -   Poisson point pattern $\lambda_2=6$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
 
 ```{r}
@@ -145,7 +139,7 @@ set.seed(62); r2 = .rppp(
 )
 ```
 
-In the foreseeable future we will not support simulating more than one type of point patterns in a single call to function `.rppp()`. End user may manually `superimpose` different (`marked`) point patterns after simulating each of them separately.
+User may `superimpose` different (`marked`) point patterns after simulating each of them separately.
 
 ```{r}
 #| eval: false
@@ -169,7 +163,7 @@ We simulate for three (3) subjects (e.g., patients). The subject-specific parame
 -   `sd` may be a `numeric` scalar, indicating an *all-equal* `diag`onal-`var`iance zero-`cov`ariance matrix. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$.
 -   To specify a full variance-covariance matrix $\Sigma$, user should use function `MASS::mvrnorm()`
 
-We must make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matérn's cluster processes, and $\log\sigma>0$ for log-normal distribution. Each `matrix` of the subject-specific parameters has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
+We must make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matérn's cluster processes, and $\log\sigma>0$ for log-normal distribution. 
 
 ```{r}
 set.seed(39); p_Matern = mapply(
@@ -187,9 +181,11 @@ set.seed(39); p_Matern = mapply(
   })
 ```
 
+The subject-specific parameters are stored in a `list` of `matrix`-es.  Each `matrix` has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
+
 ```{r}
 #| code-fold: true
-#| code-summary: Subject-specific parameters
+#| code-summary: "Subject-specific parameters *`p_Matern`*"
 p_Matern
 ```
 
@@ -244,7 +240,7 @@ set.seed(39); p_Poisson = mapply(
 
 ```{r}
 #| code-fold: true
-#| code-summary: Subject-specific parameters
+#| code-summary: "Subject-specific parameters *`p_Poisson`*"
 p_Poisson
 ```
 
