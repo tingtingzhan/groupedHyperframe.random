@@ -4,7 +4,7 @@
 \alias{mvrnorm2}
 \title{Expand Types of \code{Sigma} in \link[MASS]{mvrnorm}}
 \usage{
-mvrnorm2(n, mu, sd, Sigma, ...)
+mvrnorm2(n, mu, sd, ...)
 }
 \arguments{
 \item{n}{\link[base]{integer} scalar, sample size}
@@ -13,10 +13,6 @@ mvrnorm2(n, mu, sd, Sigma, ...)
 multivariate means \eqn{\mathbf{\mu}}'s}
 
 \item{sd}{\link[base]{numeric} scalar or a \link[base]{vector}, standard deviation(s)}
-
-\item{Sigma}{\link[base]{numeric} \link[base]{matrix},
-\link[stats]{var}iance-\link[stats]{cov}ariance
-\link[base]{matrix} \eqn{\Sigma}}
 
 \item{...}{additional parameter of function \link[MASS]{mvrnorm}}
 }
@@ -27,15 +23,19 @@ Function \code{\link[=mvrnorm2]{mvrnorm2()}} returns a \link[base]{double} \link
 To accommodate more types of \code{Sigma} in function \link[MASS]{mvrnorm}.
 }
 \details{
-Argument of parameter \code{Sigma} could be
+Argument of parameter \code{sd} could be
+
 \describe{
-\item{scalar}{First, \code{Sigma} is recycled to the \link[base]{length} of \code{mu}.
-Then a \link[base]{diag}onal \link[base]{matrix} with \link[base]{vector} \code{Sigma} on the diagonal elements
+
+\item{scalar}{\code{sd} is recycled to the \link[base]{length} of \code{mu}}
+
+\item{\link[base]{vector}}{check that \link[base]{length} of \code{sd} and \code{mu} must be the same}
+
+}
+
+Then a \link[base]{diag}onal \link[base]{matrix} with \link[base]{vector} \code{sd^2} on the diagonal elements
 is used as the \link[stats]{var}iance-\link[stats]{cov}ariance
-\link[base]{matrix} \eqn{\Sigma}}
-\item{\link[base]{vector}}{First, check that \link[base]{length} of \code{Sigma} and \code{mu} must be the same.
-Then the \link[base]{diag}onal \link[base]{matrix} is used as \eqn{\Sigma}}
-\item{\link[base]{matrix}}{\code{Sigma} is used as \eqn{\Sigma}}}
+\link[base]{matrix} \eqn{\Sigma}
 }
 \note{
 Workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than \code{?mvtnorm::rmvnorm}.

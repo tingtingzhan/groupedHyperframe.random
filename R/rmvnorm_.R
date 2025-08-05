@@ -53,22 +53,23 @@
 #' 
 #' @param sd \link[base]{numeric} scalar or a \link[base]{vector}, standard deviation(s)
 #' 
-#' @param Sigma \link[base]{numeric} \link[base]{matrix}, 
-#' \link[stats]{var}iance-\link[stats]{cov}ariance 
-#' \link[base]{matrix} \eqn{\Sigma}
-#' 
 #' @param ... additional parameter of function \link[MASS]{mvrnorm}
 #' 
 #' @details
-#' Argument of parameter `Sigma` could be
+#' 
+#' Argument of parameter `sd` could be
+#' 
 #' \describe{
-#' \item{scalar}{First, `Sigma` is recycled to the \link[base]{length} of `mu`. 
-#' Then a \link[base]{diag}onal \link[base]{matrix} with \link[base]{vector} `Sigma` on the diagonal elements
+#' 
+#' \item{scalar}{`sd` is recycled to the \link[base]{length} of `mu`}
+#' 
+#' \item{\link[base]{vector}}{check that \link[base]{length} of `sd` and `mu` must be the same}
+#' 
+#' }
+#' 
+#' Then a \link[base]{diag}onal \link[base]{matrix} with \link[base]{vector} `sd^2` on the diagonal elements
 #' is used as the \link[stats]{var}iance-\link[stats]{cov}ariance 
-#' \link[base]{matrix} \eqn{\Sigma}}
-#' \item{\link[base]{vector}}{First, check that \link[base]{length} of `Sigma` and `mu` must be the same.
-#' Then the \link[base]{diag}onal \link[base]{matrix} is used as \eqn{\Sigma}}
-#' \item{\link[base]{matrix}}{`Sigma` is used as \eqn{\Sigma}}}
+#' \link[base]{matrix} \eqn{\Sigma}
 #' 
 #' @returns 
 #' Function [mvrnorm2()] returns a \link[base]{double} \link[base]{matrix}.
@@ -79,14 +80,11 @@
 #' @keywords internal
 #' @importFrom MASS mvrnorm
 #' @export
-mvrnorm2 <- function(n, mu, sd, Sigma, ...) {
+mvrnorm2 <- function(n, mu, sd, ...) {
   d <- length(mu)
-  if (missing(Sigma)) {
-    if (missing(sd)) stop('must provide `sd` when `Sigma` is missing')
-    nsd <- length(sd)
-    if (nsd == 1L) sd <- rep(sd, times = d)
-    if (length(sd) != d) stop('`length(sd)` not same with length(mu)')
-    Sigma <- diag(x = sd^2, nrow = d, ncol = d)
-  }
+  nsd <- length(sd)
+  if (nsd == 1L) sd <- rep(sd, times = d)
+  if (length(sd) != d) stop('`length(sd)` not same with length(mu)')
+  Sigma <- diag(x = sd^2, nrow = d, ncol = d)
   mvrnorm(n = n, mu = mu, Sigma = Sigma) # matrix of `n`-by-`d`
 }

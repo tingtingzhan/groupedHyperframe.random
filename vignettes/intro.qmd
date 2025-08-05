@@ -37,13 +37,19 @@ Package **`groupedHyperframe.random`** `Imports` packages
 
 -   **`cli`** [@cli, v`r packageVersion('cli')`], for attractive **c**ommand **l**ine **i**nterfaces
 -   `r '\U1f5dd'` **`MASS`** [@MASS, v`r packageVersion('MASS')`], key dependency, for function `MASS::mvrnorm`
--   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`), @spatstat15, key dependency, for operations on `ppp.object` and `marks`
--   `r '\U1f5dd'` **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`), @spatstat15, key dependency, for simulation of `ppp.object`
+-   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`) and **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`) [@spatstat15; @spatstat05], key dependency, for operation and simulation of `ppp.object` and `marks`
 -   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for grouped hyper data frame
 
 ## Prerequisite
 
-Package **`groupedHyperframe.random`** requires R version 4.5.0 (released 2025-04-11) or higher. [RStudio](https://posit.co/download/rstudio-desktop/) is not required, but highly recommended. This vignette is generated under `r R.version$version.string` using packages **`knitr`** [@knitr, v`r packageVersion('knitr')`], **`quarto`** [@quarto, v`r packageVersion('quarto')`], **`rmarkdown`** [@rmarkdown, v`r packageVersion('rmarkdown')`], and the development versions of the **`spatstat`** family of packages [@spatstat15; @spatstat05].
+Package **`groupedHyperframe.random`** requires R version 4.5.0 (released 2025-04-11) or higher. [RStudio](https://posit.co/download/rstudio-desktop/) is not required, but highly recommended. This vignette is generated under `r R.version$version.string` using packages **`knitr`** [@knitr, v`r packageVersion('knitr')`], **`quarto`** [@quarto, v`r packageVersion('quarto')`], **`rmarkdown`** [@rmarkdown, v`r packageVersion('rmarkdown')`], and the development versions of the **`spatstat.*`** family of packages.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Environment on author's computer"
+Sys.info()[c('sysname', 'release', 'machine')]
+R.version
+```
 
 ```{r}
 #| label: prerequisite
@@ -64,7 +70,6 @@ remotes::install_github('spatstat/spatstat.utils', upgrade = 'always')
 Experimental (and maybe unstable) features are released *extremely frequently* to [Github](https://github.com/tingtingzhan/groupedHyperframe.random). [Active developers should use the Github version; suggestions and bug reports are welcome!]{style="background-color: #FFFF00"}
 
 ```{r}
-#| warning: false
 #| eval: false
 remotes::install_github('tingtingzhan/groupedHyperframe.random')
 ```
@@ -72,8 +77,9 @@ remotes::install_github('tingtingzhan/groupedHyperframe.random')
 Stable releases to [CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random) are typically updated every 2 to 3 months, or when the authors have an upcoming manuscript in the peer-reviewing process.
 
 ```{r}
-#| warning: false
 #| eval: false
+#| code-fold: true
+#| code-summary: "Developers, do NOT use the CRAN version!"
 utils::install.packages('groupedHyperframe.random') # Developers, do NOT use!!
 ```
 
@@ -101,17 +107,16 @@ This work is supported by National Institutes of Health, U.S. Department of Heal
 
 Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of random point pattern and distribution of `marks`. Function `.rppp()` returns a `ppp.object`.
 
-## Simulated un`marked` Point Pattern
+Example below simulates a `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes 
 
-Example below simulates a `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes $(\kappa, \mu, s) = (10,8,.15)$ and $(5,4,.06)$.
+-   $(\kappa_1, \mu_1, s_1) = (10,8,.15)$
+-   $(\kappa_2, \mu_2, s_2) = (5,4,.06)$
 
 ```{r}
 set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
 ```
 
-## Simulated `marked` Point Pattern
-
-Example below simulates two `superimpose`d `marked` `ppp`s,
+Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
 -   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
 
@@ -126,7 +131,7 @@ set.seed(125); r1 = .rppp(
 )
 ```
 
-Example below simulates two `superimpose`d `marked` `ppp`s,
+Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
 -   Poisson point pattern $\lambda_1=3$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
 
@@ -158,7 +163,13 @@ Consider two `superimpose`d Matérn's cluster processes, each with one log-norma
 -   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (3,10,.4)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$
 -   Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (2,5,.2)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$
 
-We simulate for three (3) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviations `sd` $\sigma$, or the variance-covariance matrix `Sigma` $\Sigma$. The standard deviations `sd` may be specified by a `numeric` scalar, indicating all-equal `diag`onal `var`iances and zero `cor`relations/`cov`ariances. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$. We must make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matérn's cluster processes, and $\log\sigma>0$ for log-normal distribution. Each `matrix` of the subject-specific parameters has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
+We simulate for three (3) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviation(s) $\sigma$, or the variance-covariance matrix $\Sigma$. Function `mvrnorm2()` is a wrapper of function `MASS::mvrnorm()` to accept the standard deviation(s) $\sigma$ via parameter `sd`
+
+-   `sd` may be a `numeric` vector of the same length as parameter $\mu$ `mu`, indicating a `diag`onal-`var`iance zero-`cov`ariance matrix
+-   `sd` may be a `numeric` scalar, indicating an *all-equal* `diag`onal-`var`iance zero-`cov`ariance matrix. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$.
+-   To specify a full variance-covariance matrix $\Sigma$, user should use function `MASS::mvrnorm()`
+
+We must make sure that all subject-specific parameters satisfy that $\kappa>1$, $\mu>1$, $s>0$ for Matérn's cluster processes, and $\log\sigma>0$ for log-normal distribution. Each `matrix` of the subject-specific parameters has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
 
 ```{r}
 set.seed(39); p_Matern = mapply(
