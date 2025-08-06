@@ -1,39 +1,4 @@
 
-# @title Batch Process of Random Multivariate Normal Generation
-# 
-# @description
-# Batch process of random multivariate normal generation [mvrnorm2].
-# 
-# @param n \link[base]{integer} scalar
-# 
-# @param mu \link[base]{list}, each element is passed to parameter `mu` of function [mvrnorm2]
-# 
-# @param Sigma \link[base]{list}, each element is passed to parameter `Sigma` of function [mvrnorm2]
-# 
-# @param ... additional parameters of function \link[MASS]{mvrnorm}
-# 
-# @returns
-# Function [rmvnorm_()] returns a \link[base]{list} of \link[base]{matrix}es.
-# 
-# @examples
-# rmvnorm_(n = 5L, mu = list(a = c(0, 3), b = c(3, 7)), Sigma = list(a = .5, b = 1.2))
-# rmvnorm_(n = 5L, mu = list(a = 0, b = c(3, 7)), Sigma = list(a = .5, b = 1.2))
-# @keywords internal
-# @export
-#rmvnorm_ <- function(n, mu, sd, Sigma, ...) {
-#  if (!setequal(names(mu), names(Sigma))) stop('`mu` and `Sigma` must have same names')
-#  mapply(
-#    FUN = mvrnorm2, 
-#    mu = mu, 
-#    Sigma = Sigma[names(mu)], 
-#    MoreArgs = list(n = n, ...), 
-#    SIMPLIFY = FALSE
-#  )
-#}
-# WILL REMOVE!!!!!!!!
-
-
-
 
 
 
