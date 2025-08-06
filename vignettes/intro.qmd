@@ -183,7 +183,7 @@ set.seed(39); p_Matern = mapply(
   })
 ```
 
-The subject-specific parameters are stored in a `list` of `matrix`-es.  Each `matrix` has the subjects on the rows, and the parameters of the `ppp.object`s to be `superimpose`d on the columns.
+The subject-specific parameters are stored in a `list` of `matrix`-es.  Each `matrix` has three (3) rows for the three (3) subjects, and two (2) columns for the two (2) Matérn's cluster processes to be `superimpose`d.
 
 ```{r}
 #| code-fold: true
