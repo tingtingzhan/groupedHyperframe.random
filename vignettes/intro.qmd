@@ -84,7 +84,7 @@ utils::install.packages('groupedHyperframe') # Developers, do NOT use!!
 utils::install.packages('groupedHyperframe.random') # Developers, do NOT use!!
 ```
 
-## Note to Users
+## Getting Started
 
 Examples in this vignette require that the `search` path has
 
@@ -108,7 +108,7 @@ This work is supported by National Institutes of Health, U.S. Department of Heal
 
 Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of the random point pattern and the distribution of `marks`. Function `.rppp()` returns a `ppp.object`.
 
-Example below simulates a `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$.
+Example below simulates an $x$- and $y$- `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$.
 
 ```{r}
 set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
@@ -116,8 +116,8 @@ set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15
 
 Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
--   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
--   Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (5,4,.06)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
+-   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
+-   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (5,4,.06)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r,p)=(4,.3)$.
 
 ```{r}
 #| code-summary: Two superimposed Matérn's cluster process with log-normal and negative-binomial marks
@@ -130,8 +130,8 @@ set.seed(125); r1 = .rppp(
 
 Example below simulates two `superimpose`d `marked` `ppp.object`s,
 
--   Poisson point pattern $\lambda_1=3$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
--   Poisson point pattern $\lambda_2=6$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
+-   $x$- and $y$-`coords` by Poisson point pattern $\lambda_1=3$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
+-   $x$- and $y$-`coords` by Poisson point pattern $\lambda_2=6$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
 
 ```{r}
 set.seed(62); r2 = .rppp(
@@ -156,8 +156,8 @@ Function `grouped_rppp()` simulates `groupedHyperframe` based on population para
 
 Consider two `superimpose`d Matérn's cluster processes, each with one log-normal `mark`. The population parameters are
 
--   Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (3,10,.4)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$
--   Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (2,5,.2)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$
+-   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (3,10,.4)$, with a log-normal `mark` $(\log\mu_1,\log\sigma_1)=(3,.4)$
+-   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (2,5,.2)$, with a log-normal `mark` $(\log\mu_2,\log\sigma_2)=(5,.2)$
 
 We simulate for three (3) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviation(s) $\sigma$, or the variance-covariance matrix $\Sigma$. Function `mvrnorm2()` is a wrapper of function `MASS::mvrnorm()` to accept the standard deviation(s) $\sigma$ via parameter `sd`
 
@@ -220,8 +220,8 @@ r_Matern
 
 Consider two `superimpose`d Poisson point pattern, each with one negative-binomial `mark`. The population parameters are
 
--   Poisson point pattern $\lambda_1=3$, with a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
--   Poisson point pattern $\lambda_2=6$, with a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
+-   $x$- and $y$-`coords` by Poisson point pattern $\lambda_1=3$, with a negative-binomial `mark` $(r_1,p_1)=(4,.3)$.
+-   $x$- and $y$-`coords` by Poisson point pattern $\lambda_2=6$, with a negative-binomial `mark` $(r_2,p_2)=(6,.1)$.
 
 We also simulate for three (3) subjects (e.g., patients). Let the random effect standard deviations be $\sigma_\lambda=.1$, $\sigma_r=.2$ and $\sigma_p=.05$. We must make sure that all subject-specific parameters satisfy that $\lambda>0$ for Poisson point pattern, and $r>0$, $0<p<1$ for negative-binomial distribution.
 
