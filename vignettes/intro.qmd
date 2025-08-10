@@ -161,7 +161,7 @@ Consider two `superimpose`d Matérn's cluster processes, each with one log-norma
 
 We simulate for three (`3`) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviation(s) $\sigma$, or the variance-covariance matrix $\Sigma$. Function `mvrnorm2()` is a wrapper of function `MASS::mvrnorm()` to accept the standard deviation(s) $\sigma$ via parameter `sd`
 
--   parameter $\sigma$ `sd` may be a `numeric` vector of the same length as parameter $\mu$ `mu`, indicating a `diag`onal-`var`iance zero-`cov`ariance matrix
+-   parameter $\sigma$ `sd` may be a `numeric` `vector` of the same length as parameter $\mu$ `mu`, indicating a `diag`onal-`var`iance zero-`cov`ariance matrix
 -   parameter $\sigma$ `sd` may be a `numeric` scalar, indicating an *all-equal* `diag`onal-`var`iance zero-`cov`ariance matrix. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$.
 -   To specify a full variance-covariance matrix $\Sigma$, user should use function `MASS::mvrnorm()`
 
