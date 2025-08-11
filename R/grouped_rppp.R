@@ -49,7 +49,7 @@ grouped_rppp <- function(
   
   ppp. <- mapply(FUN = \(n, p) { # p = pars[[1L]]; n = n[1L]
     list(dots = p, n = n, win = win, element1 = FALSE) |>
-      do.call(what = .rppp) |>
+      do.call(what = .rppp, args = _) |>
       suppressMessages()
   }, p = pars, n = n, SIMPLIFY = FALSE) |>
     unlist(recursive = FALSE)

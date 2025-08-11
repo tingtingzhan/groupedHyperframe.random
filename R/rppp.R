@@ -101,16 +101,27 @@
     lapply(FUN = \(i) {
       pkg <- i |> get() |> environment() |> getNamespaceName()
       paste(pkg, i, sep = '::') |> 
-        sprintf(fmt = 'Marks simulated by {.fun %s}') |> 
+        sprintf(fmt = 'Mark simulated by {.fun %s}') |> 
         col_magenta() |>
         cli_text() |>
         message(appendLF = FALSE)
     })
   
+  r1 <- get(r[1L]) # let err
+  rnm <- names(formals(r1))
+  winpar <- if ('win' %in% rnm) {
+    list(win = win)
+  } else if ('W' %in% rnm) {
+    list(W = win)
+  } else stop('shouldnt happen')
+  #winpar <- switch(r[1L], rCauchyHom =, rDGS =, rDiggleGratton =, rGRFcircembed =, rGRFexpo =, rGRFgauss =, rStrauss = {
+  #  # tzh stopped checking at spatstat.random::rGRFgauss
+  #  list(W = win)
+  #  # write to Dr. Baddeley?
+  #}, list(win = win))
+  
   fn <- function(j) { # (j = 1L)
-    winpar <- switch(r[1L], rStrauss = list(W = win), list(win = win))
-    # tzh will write to Dr. Baddeley after he approves groupedHyperframe.random vignette ... 
-    X <- do.call(what = r[1L], args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
+    X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
     for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
       X <- do.call(what = rmarks_ppp(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
     } # for-loop is the easiest!!!
