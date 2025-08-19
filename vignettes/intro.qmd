@@ -42,7 +42,7 @@ Package **`groupedHyperframe.random`** `Imports` packages
 
 ## Prerequisite
 
-Package **`groupedHyperframe.random`** requires R version 4.5.0 (released 2025-04-11) or higher. [RStudio](https://posit.co/download/rstudio-desktop/) is not required, but highly recommended. This vignette is generated under `r R.version$version.string` using packages **`knitr`** [@knitr, v`r packageVersion('knitr')`], **`quarto`** [@quarto, v`r packageVersion('quarto')`], **`rmarkdown`** [@rmarkdown, v`r packageVersion('rmarkdown')`], and the development versions of the **`spatstat.*`** family of packages.
+Package **`groupedHyperframe.random`** requires R version 4.5.0 (released 2025-04-11) or higher ([macOS](https://cran.r-project.org/bin/macosx/), [Windows](https://cran.r-project.org/bin/windows/base/)). An Integrated Development Environment (IDE), e.g., [RStudio](https://posit.co/download/rstudio-desktop/) [@RStudio] or [Positron](https://positron.posit.co/download.html), is not required, but highly recommended. This vignette is created under `r R.version$version.string` using packages **`knitr`** [@knitr, v`r packageVersion('knitr')`], **`quarto`** [@quarto, v`r packageVersion('quarto')` with [Quarto](https://quarto.org/docs/get-started/) v`r quarto::quarto_version()`] and **`rmarkdown`** [@rmarkdown, v`r packageVersion('rmarkdown')`], and the development versions of the **`spatstat.*`** family of packages.
 
 ```{r}
 #| code-fold: true
@@ -159,7 +159,7 @@ Consider two `superimpose`d Matérn's cluster processes, each with one log-norma
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (3,10,.4)$, with a log-normal mark $(\log\mu_1,\log\sigma_1)=(3,.4)$
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (2,5,.2)$, with a log-normal mark $(\log\mu_2,\log\sigma_2)=(5,.2)$
 
-We simulate for three (`3`) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviation(s) $\sigma$, or the variance-covariance matrix $\Sigma$. Function `mvrnorm2()` is a wrapper of function `MASS::mvrnorm()` to accept the standard deviation(s) $\sigma$ via parameter `sd`
+We simulate for three (`3L`) subjects (e.g., patients). The subject-specific parameters deviate from the population parameters under a multivariate normal distribution specified with either the standard deviation(s) $\sigma$, or the variance-covariance matrix $\Sigma$. Function `mvrnorm2()` is a wrapper of function `MASS::mvrnorm()` to accept the standard deviation(s) $\sigma$ via parameter `sd`
 
 -   parameter $\sigma$ `sd` may be a `numeric` `vector` of the same length as parameter $\mu$ `mu`, indicating a `diag`onal-`var`iance zero-`cov`ariance matrix
 -   parameter $\sigma$ `sd` may be a `numeric` scalar, indicating an *all-equal* `diag`onal-`var`iance zero-`cov`ariance matrix. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$.
@@ -183,7 +183,7 @@ set.seed(39); p_Matern = mapply(
   })
 ```
 
-The subject-specific parameters *`p_Matern`* are stored in a `list` of `matrix`-es.  Each `matrix` has three (`3`) rows for the three (`3`) subjects, and two (`2`) columns for the two (`2`) Matérn's cluster processes to be `superimpose`d.
+The subject-specific parameters *`p_Matern`* are stored in a `list` of `matrix`-es.  Each `matrix` has three (`3L`) rows for the three (`3L`) subjects, and two (`2L`) columns for the two (`2L`) Matérn's cluster processes to be `superimpose`d.
 
 ```{r}
 #| code-fold: true
@@ -191,7 +191,7 @@ The subject-specific parameters *`p_Matern`* are stored in a `list` of `matrix`-
 p_Matern
 ```
 
-We simulate one (`1`) to four (`4`) `ppp.object`s (e.g., medical images) for each of the three (`3`) subjects (e.g., patients).
+We simulate one (`1L`) to four (`4L`) `ppp.object`s (e.g., medical images) for each of the three (`3L`) subjects (e.g., patients).
 
 ```{r}
 set.seed(37); (n = sample(x = 1:4, size = 3L, replace = TRUE)) 
@@ -223,7 +223,7 @@ Consider two `superimpose`d Poisson point pattern, each with one negative-binomi
 -   $x$- and $y$-`coords` by Poisson point pattern $\lambda_1=3$, with a negative-binomial mark $(r_1,p_1)=(4,.3)$.
 -   $x$- and $y$-`coords` by Poisson point pattern $\lambda_2=6$, with a negative-binomial mark $(r_2,p_2)=(6,.1)$.
 
-We also simulate for three (`3`) subjects (e.g., patients). Let the random effect standard deviations be $\sigma_\lambda=.1$, $\sigma_r=.2$ and $\sigma_p=.05$. We must make sure that all subject-specific parameters satisfy that `lambda` $\lambda>0$ for Poisson point pattern, and `size` $r>0$, `prob` $0<p<1$ for negative-binomial distribution.
+We also simulate for three (`3L`) subjects (e.g., patients). Let the random effect standard deviations be $\sigma_\lambda=.1$, $\sigma_r=.2$ and $\sigma_p=.05$. We must make sure that all subject-specific parameters satisfy that `lambda` $\lambda>0$ for Poisson point pattern, and `size` $r>0$, `prob` $0<p<1$ for negative-binomial distribution.
 
 ```{r}
 set.seed(39); p_Poisson = mapply(
@@ -246,7 +246,7 @@ set.seed(39); p_Poisson = mapply(
 p_Poisson
 ```
 
-We simulate one (`1`) to four (`4`) `ppp.object`s (e.g., medical images) for each of the three (`3`) subjects (e.g., patients), using the same grouping size as in @sec-groupedHyperframe_Matern.
+We simulate one (`1L`) to four (`4L`) `ppp.object`s (e.g., medical images) for each of the three (`3L`) subjects (e.g., patients), using the same grouping size as in @sec-groupedHyperframe_Matern.
 
 ```{r}
 set.seed(76); r_Poisson = p_Poisson |> 
@@ -267,7 +267,7 @@ r_Poisson
 
 ## Superimpose
 
-Users may use the S3 method dispatch `groupedHyperframe::superimpose.groupedHyperframe()` to superimpose multiple simulated `groupedHyperframe`s with different point patterns. Users are encouraged to read the vignette (CRAN, [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe)) of package **`groupedHyperframe`**, Appendix section *On `hyperframe`* for more details.
+Users may use the `S3` method dispatch `groupedHyperframe::superimpose.groupedHyperframe()` to superimpose multiple simulated `groupedHyperframe`s with different point patterns. Users are encouraged to read the vignette (CRAN, [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe)) of package **`groupedHyperframe`**, Appendix section *On `hyperframe`* for more details.
 
 ```{r}
 r = superimpose.groupedHyperframe(r_Matern, r_Poisson)
