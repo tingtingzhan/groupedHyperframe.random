@@ -10,7 +10,7 @@
 #' Can also be the function name as a \link[base]{character} scalar.
 #' 
 #' @returns 
-#' Function [rmarks_ppp()] returns a ***\link[base]{function}***,
+#' Function [rmarks_()] returns a ***\link[base]{function}***,
 #' which generates random marks of a \link[spatstat.geom]{ppp.object} 
 #' following the probability distribution specified by argument `f`.
 #' The returned ***\link[base]{function}*** 
@@ -20,20 +20,21 @@
 #' }
 #' 
 #' @examples
-#' rmarks_ppp(rlnorm)
-#' rmarks_ppp('rnbinom')
+#' rmarks_(rlnorm)
+#' rmarks_('rnbinom')
 #' 
 #' library(spatstat.random)
 #' plot(pp <- rpoispp(lambda = 100))
 #' 
 #' plot(pp |>
-#'  rmarks_ppp(rlnorm)(sdlog = .5) |>
-#'  rmarks_ppp(rnbinom)(size = 5L, prob = .3) |>
-#'  rmarks_ppp(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
+#'  rmarks_(rlnorm)(sdlog = .5) |>
+#'  rmarks_(rnbinom)(size = 5L, prob = .3) |>
+#'  rmarks_(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
 #'  
 #' @keywords internal  
+#' @importFrom groupedHyperframe append_marks<-
 #' @export
-rmarks_ppp <- function(f) {
+rmarks_ <- function(f) {
   
   if (is.function(f)) {
     f_ <- substitute(f)
@@ -58,11 +59,25 @@ rmarks_ppp <- function(f) {
   ret[[length(ret)]] <- call(
     name = '{', 
     #call(name = 'append_marks.ppp<-', quote(x), value = as.call(c(list(f_), tmp))), # correct, but ..
-    call(name = '<-', call(name = 'append_marks.ppp', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
+    #call(name = '<-', call(name = 'append_marks.ppp', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
+    #call(name = 'append_marks<-', quote(x), value = as.call(c(list(f_), tmp))), # correct, but ..
+    call(name = '<-', call(name = 'append_marks', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
     call(name = 'return', quote(x))
   )
   
-  return(as.function.default(ret))
+  #return(as.function.default(ret))
+  
+  .fn <- ret |> 
+    as.function.default()
+  # prefix dot (.) will not show up in ls(., all.names = FALSE)
+  
+  # clean the enclosure envir of `.fn` as much as possible
+  rm(list = c(
+    # '.fn', # no!! otherwise nothing to return ..
+    'ag', 'f', 'f_', 'par_', 'ret', 'tmp'
+  ), envir = environment(.fn))
+  
+  return(.fn)
   
 }
 

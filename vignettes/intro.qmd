@@ -15,7 +15,7 @@ bibliography: groupedHyperframe.random.bib
 knitr:
   opts_chunk: 
     collapse: true
-    comment: "#>" 
+    comment: "#" 
 vignette: >
   %\VignetteIndexEntry{intro}
   %\VignetteEngine{quarto::html}
@@ -33,12 +33,22 @@ R terminology might be different from that of mathematics and statistics. Please
 
 Package **`groupedHyperframe.random`** `Enhances` the package **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`).
 
+Package **`groupedHyperframe.random`** `Depends` on packages
+
+-   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for grouped hyper data frame. Specifically, the function `groupedHyperframe::superimpose.groupedHyperframe()`
+
 Package **`groupedHyperframe.random`** `Imports` packages
 
--   **`cli`** [@cli, v`r packageVersion('cli')`], for attractive **c**ommand **l**ine **i**nterfaces
--   `r '\U1f5dd'` **`MASS`** [@MASS, v`r packageVersion('MASS')`], key dependency, for function `MASS::mvrnorm`
+-   **`cli`** [@cli, v`r packageVersion('cli')`], for attractive command line interfaces
+-   `r '\U1f5dd'` **`MASS`** [@MASS, v`r packageVersion('MASS')`], key dependency, for function `MASS::mvrnorm()`
 -   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`) and **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`) [@spatstat15; @spatstat05], key dependency, for operation and simulation of `ppp.object` and `marks`
--   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for grouped hyper data frame
+-   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for function `` groupedHyperframe::`append_marks<-`() ``
+
+<!--
+Package **`groupedHyperframe.random`** `Suggests` packages
+
+-   `r '\U1f5dd'` **`spatstat.data`** (dev v`r packageVersion('spatstat.data')`), key suggest, for example spatial data set
+-->
 
 ## Prerequisite
 
@@ -267,7 +277,7 @@ r_Poisson
 
 ## Superimpose
 
-Users may use the `S3` method dispatch `groupedHyperframe::superimpose.groupedHyperframe()` to superimpose multiple simulated `groupedHyperframe`s with different point patterns. Users are encouraged to read the vignette (CRAN, [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe)) of package **`groupedHyperframe`**, Appendix section *On `hyperframe`* for more details.
+The `S3` method dispatch `groupedHyperframe::superimpose.groupedHyperframe()` superimposes multiple simulated `groupedHyperframe`s with different point patterns. Users are encouraged to read package **`groupedHyperframe`** vignette (CRAN, [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe)), Appendix section *On `hyperframe`* for more details.
 
 ```{r}
 r = superimpose.groupedHyperframe(r_Matern, r_Poisson)

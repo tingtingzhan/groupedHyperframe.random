@@ -123,7 +123,7 @@
   fn <- function(j) { # (j = 1L)
     X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
     for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
-      X <- do.call(what = rmarks_ppp(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
+      X <- do.call(what = rmarks_(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
     } # for-loop is the easiest!!!
     return(X)
   } 

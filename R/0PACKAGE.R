@@ -7,7 +7,6 @@
 #' 
 #' `vignette('intro', package = 'groupedHyperframe.random')`
 #' 
-#' @import groupedHyperframe
 #' @import spatstat.random
 '_PACKAGE'
 
