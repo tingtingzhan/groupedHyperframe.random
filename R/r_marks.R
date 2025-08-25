@@ -3,14 +3,14 @@
 #' @title Create Random `marks` Generation Function for \link[spatstat.geom]{ppp.object}
 #' 
 #' @description
-#' Create random `marks` generation ***\link[base]{function}*** for \link[spatstat.geom]{ppp.object}.
+#' Create random `marks` generation \link[base]{function} for \link[spatstat.geom]{ppp.object}.
 #' 
 #' @param f \link[base]{function} of random number generation, 
 #' e.g., \link[stats]{rlnorm}, \link[stats]{rnbinom}, etc.
 #' Can also be the function name as a \link[base]{character} scalar.
 #' 
 #' @returns 
-#' Function [rmarks_()] returns a ***\link[base]{function}***,
+#' Function [r_marks()] returns a ***\link[base]{function}***,
 #' which generates random marks of a \link[spatstat.geom]{ppp.object} 
 #' following the probability distribution specified by argument `f`.
 #' The returned ***\link[base]{function}*** 
@@ -20,21 +20,20 @@
 #' }
 #' 
 #' @examples
-#' rmarks_(rlnorm)
-#' rmarks_('rnbinom')
+#' r_marks(rlnorm)
+#' r_marks('rnbinom')
 #' 
-#' library(spatstat.random)
-#' plot(pp <- rpoispp(lambda = 100))
+#' (pp = spatstat.random::rpoispp(lambda = 100))
 #' 
 #' plot(pp |>
-#'  rmarks_(rlnorm)(sdlog = .5) |>
-#'  rmarks_(rnbinom)(size = 5L, prob = .3) |>
-#'  rmarks_(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
+#'  r_marks(rlnorm)(sdlog = .5) |>
+#'  r_marks(rnbinom)(size = 5L, prob = .3) |>
+#'  r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
 #'  
 #' @keywords internal  
 #' @importFrom groupedHyperframe append_marks<-
 #' @export
-rmarks_ <- function(f) {
+r_marks <- function(f) {
   
   if (is.function(f)) {
     f_ <- substitute(f)
@@ -58,14 +57,10 @@ rmarks_ <- function(f) {
   
   ret[[length(ret)]] <- call(
     name = '{', 
-    #call(name = 'append_marks.ppp<-', quote(x), value = as.call(c(list(f_), tmp))), # correct, but ..
-    #call(name = '<-', call(name = 'append_marks.ppp', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
     #call(name = 'append_marks<-', quote(x), value = as.call(c(list(f_), tmp))), # correct, but ..
     call(name = '<-', call(name = 'append_marks', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
     call(name = 'return', quote(x))
   )
-  
-  #return(as.function.default(ret))
   
   .fn <- ret |> 
     as.function.default()
@@ -102,16 +97,26 @@ rmarks_ <- function(f) {
 #' 
 # @param ... additional parameters, currently not in use
 #' 
+#' @details
+#' Function [rfactor()] is a wrapper of \link[base]{sample.int}.
+#' 
+#' 
+#' 
 #' @returns 
-#' Function [rfactor()] returns a \link[base]{factor}
+#' Function [rfactor()] returns a \link[base]{factor}.
+#' 
+#' @note
+#' Function \link[stats]{rmultinom} is **not** what we need!
 #' 
 #' @examples
 #' rfactor(n = 100L, prob = c(4,2,3))
 #' rfactor(n = 100L, prob = c(4,2,3), levels = letters[1:3])
 #' @keywords internal
 #' @export
-rfactor <- function(n, prob, levels = as.character(seq_along(prob))) {
-  ret <- sample.int(n = length(prob), size = n, prob = prob, replace = TRUE)
+rfactor <- function(n, prob, levels = as.character(seq_len(nprob))) {
+  nprob <- length(prob)
+  if (length(levels) != nprob) stop('`levels` and `prob` must have same length')
+  ret <- sample.int(n = nprob, size = n, prob = prob, replace = TRUE)
   attr(ret, which = 'levels') <- levels
   attr(ret, which = 'class') <- 'factor'
   return(ret)

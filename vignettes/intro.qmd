@@ -45,11 +45,13 @@ Package **`groupedHyperframe.random`** `Imports` packages
 -   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`) and **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`) [@spatstat15; @spatstat05], key dependency, for operation and simulation of `ppp.object` and `marks`
 -   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for function `` groupedHyperframe::`append_marks<-`() ``
 
+```{=html}
 <!--
 Package **`groupedHyperframe.random`** `Suggests` packages
 
 -   `r '\U1f5dd'` **`spatstat.data`** (dev v`r packageVersion('spatstat.data')`), key suggest, for example spatial data set
 -->
+```
 
 ## Prerequisite
 
@@ -85,7 +87,6 @@ Experimental (and maybe unstable) features are released *extremely frequently* t
 remotes::install_github('tingtingzhan/groupedHyperframe')
 remotes::install_github('tingtingzhan/groupedHyperframe.random')
 ```
-
 
 ```{r}
 #| eval: false
@@ -176,7 +177,7 @@ We simulate for three (`3L`) subjects (e.g., patients). The subject-specific par
 -   parameter $\sigma$ `sd` may be a `numeric` scalar, indicating an *all-equal* `diag`onal-`var`iance zero-`cov`ariance matrix. In this example we have random effect standard deviations of $\sigma_\kappa=.2$, $\sigma_\mu=.5$, $\sigma_s=.05$, $\sigma_{\log\mu}=.1$ and $\sigma_{\log\sigma}=.01$.
 -   To specify a full variance-covariance matrix $\Sigma$, user should use function `MASS::mvrnorm()`
 
-We must make sure that all subject-specific parameters satisfy that `kappa` $\kappa>1$, `mu` $\mu>1$, `scale` $s>0$ for Matérn's cluster processes, and `sdlog` $\log\sigma>0$ for log-normal distribution. 
+We must make sure that all subject-specific parameters satisfy that `kappa` $\kappa>1$, `mu` $\mu>1$, `scale` $s>0$ for Matérn's cluster processes, and `sdlog` $\log\sigma>0$ for log-normal distribution.
 
 ```{r}
 set.seed(39); p_Matern = mapply(
@@ -194,7 +195,7 @@ set.seed(39); p_Matern = mapply(
   })
 ```
 
-The subject-specific parameters *`p_Matern`* are stored in a `list` of `matrix`-es.  Each `matrix` has three (`3L`) rows for the three (`3L`) subjects, and two (`2L`) columns for the two (`2L`) Matérn's cluster processes to be `superimpose`d.
+The subject-specific parameters *`p_Matern`* are stored in a `list` of `matrix`-es. Each `matrix` has three (`3L`) rows for the three (`3L`) subjects, and two (`2L`) columns for the two (`2L`) Matérn's cluster processes to be `superimpose`d.
 
 ```{r}
 #| code-fold: true
@@ -297,7 +298,34 @@ plot(r$ppp[[1L]])
 
 # Appendix
 
-## Terms & Abbreviations {#sec-terms}
+## `r_marks()`
+
+```{r}
+r_marks(rlnorm)
+```
+
+```{r}
+r_marks('rnbinom')
+```
+
+```{r}
+(pp = spatstat.random::rpoispp(lambda = 100))
+set.seed(12); pp |>
+  r_marks(rlnorm)(sdlog = .5) |>
+  r_marks(rnbinom)(size = 5L, prob = .3) |>
+  r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3])
+```
+
+## `.rppp()`
+
+🚧 This section is under construction.
+
+## `grouped_rppp()`
+
+🚧 This section is under construction.
+
+
+# Terms & Abbreviations {#sec-terms}
 
 | Term / Abbreviation | Description |
 |------------------------------------|------------------------------------|

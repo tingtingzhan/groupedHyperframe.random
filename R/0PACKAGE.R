@@ -8,6 +8,7 @@
 #' `vignette('intro', package = 'groupedHyperframe.random')`
 #' 
 #' @import spatstat.random
+# @importFrom groupedHyperframe superimpose.groupedHyperframe # still need to Depends
 '_PACKAGE'
 
 
