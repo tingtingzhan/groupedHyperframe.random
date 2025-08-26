@@ -30,10 +30,10 @@ r_marks('rnbinom')
 
 (pp = spatstat.random::rpoispp(lambda = 100))
 
-plot(pp |>
+set.seed(12); pp |>
  r_marks(rlnorm)(sdlog = .5) |>
  r_marks(rnbinom)(size = 5L, prob = .3) |>
- r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
+ r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3])
  
 }
 \keyword{internal}

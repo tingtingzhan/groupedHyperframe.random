@@ -25,10 +25,10 @@
 #' 
 #' (pp = spatstat.random::rpoispp(lambda = 100))
 #' 
-#' plot(pp |>
+#' set.seed(12); pp |>
 #'  r_marks(rlnorm)(sdlog = .5) |>
 #'  r_marks(rnbinom)(size = 5L, prob = .3) |>
-#'  r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3]))
+#'  r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3])
 #'  
 #' @keywords internal  
 #' @importFrom groupedHyperframe append_marks<-
@@ -44,37 +44,34 @@ r_marks <- function(f) {
   }
   if (!is.symbol(f_)) stop('`f` must be symbol')
   
-  ag <- as.list(args(f)) # accepts both 'function' and 'character'
+  val <- list(f_, n = quote(x$n), quote(...)) |> as.call()
   
-  ret <- ag
-  names(ret)[[1L]] <- 'x'
-  
-  tmp <- ag[-length(ag)]
-  par_ <- names(tmp)
-  tmp[] <- lapply(par_, FUN = as.symbol) # names retained!
-  names(tmp)[par_ == '...'] <- '' # important!!
-  tmp[[1L]] <- quote(x$n) # overwrite at the end; easiest in programming
-  
-  ret[[length(ret)]] <- call(
-    name = '{', 
-    #call(name = 'append_marks<-', quote(x), value = as.call(c(list(f_), tmp))), # correct, but ..
-    call(name = '<-', call(name = 'append_marks', quote(x)), value = as.call(c(list(f_), tmp))), # pretty, but.. hahaha
-    call(name = 'return', quote(x))
-  )
-  
-  .fn <- ret |> 
+  .fn <- c(
+    alist(x = , '...' =),
+    call(
+      name = '{', 
+      #call(name = 'append_marks<-', quote(x), value = val), # correct, but ..
+      call(name = '<-', call(name = 'append_marks', quote(x)), value = val), # pretty, but.. hahaha
+      call(name = 'return', quote(x))
+    )
+  ) |> 
     as.function.default()
   # prefix dot (.) will not show up in ls(., all.names = FALSE)
   
   # clean the enclosure envir of `.fn` as much as possible
   rm(list = c(
     # '.fn', # no!! otherwise nothing to return ..
-    'ag', 'f', 'f_', 'par_', 'ret', 'tmp'
+    'f', 'f_'
   ), envir = environment(.fn))
   
   return(.fn)
   
 }
+
+
+
+
+
 
 
 

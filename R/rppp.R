@@ -120,7 +120,7 @@
   #  # write to Dr. Baddeley?
   #}, list(win = win))
   
-  fn <- function(j) { # (j = 1L)
+  fn <- \(j) { # (j = 1L)
     X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
     for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
       X <- do.call(what = r_marks(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
@@ -145,6 +145,7 @@
   return(ret)
   
 } 
+
 
 
 
