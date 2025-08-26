@@ -28,7 +28,7 @@ vignette: >
 This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random), [Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents
 
 -   the simulation of `superimpose`d (marked) point-pattern `ppp.object` via ***vectorized parameterization***;
--   the simulation of grouped hyper data frame `groupedHyperframe`.
+-   the simulation of grouped hyper data frame `groupedHyperframe` via ***matrix parameterization***.
 
 R terminology might be different from that of mathematics and statistics. Please refer to Appendix @sec-terms for explanation and reference of the terms and abbreviations used in this vignette.
 
@@ -44,7 +44,6 @@ Package **`groupedHyperframe.random`** `Imports` packages
 -   `r '\U1f5dd'` **`MASS`** [@MASS, v`r packageVersion('MASS')`], key dependency, for function `MASS::mvrnorm()`
 -   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`) and **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`) [@spatstat15; @spatstat05], key dependency, for operation and simulation of `ppp.object` and `marks`
 -   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for function `` groupedHyperframe::`append_marks<-`() ``
-
 
 ## Prerequisite
 
@@ -109,9 +108,9 @@ This work is supported by National Institutes of Health, U.S. Department of Heal
 -   R01CA222847 ([I. Chervoneva](https://orcid.org/0000-0002-9104-4505), [T. Zhan](https://orcid.org/0000-0001-9971-4844), and [H. Rui](https://orcid.org/0000-0002-8778-261X))
 -   R01CA253977 (H. Rui and I. Chervoneva).
 
-# Simulated Point Pattern
+# Simulated Point Pattern {#sec-rppp}
 
-Function `.rppp()` simulates `superimpose`d `ppp.object` via   ***vectorized parameterization***.  The vectorized parameterization is support in the specification of both the random point pattern and the random `marks`. 
+Function `.rppp()` simulates `superimpose`d `ppp.object` via [**vectorized parameterization**]{style="background-color: #FFFF00"}. The vectorized parameterization is supported in the specification of both the random point pattern and the random `marks`. Technical details of the vectorized parameterization is covered in Appendix @sec-rppp-appendix.
 
 Example below simulates an $x$- and $y$- `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes $(\kappa, \mu, s)$ `(kappa, mu, scale)` with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$. A vectorized parameterization of the random point pattern generation is used in the R code below, i.e., `kappa` $= (\kappa_1, \kappa_2)$, `mu` $= (\mu_1, \mu_2)$ and `scale` $= (s_1, s_2)$.
 
@@ -124,7 +123,7 @@ Example below simulates two `superimpose`d `marked` `ppp.object`s,
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal $(\log\mu, \log\sigma)$ `(meanlog, sdlog)` mark with parameters $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial $(r, p)$ `(size, prob)` mark with parameters $(r,p)=(4,.3)$.
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (5,4,.06)$, with a log-normal mark $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial mark $(r,p)=(4,.3)$.
 
-A vectorized parameterization of the random `marks` generation is used in the R code below, i.e., `meanlog` $= (\log\mu_1, \log\mu_2)$, `sdlog` $= (\log\sigma_1, \log\sigma_2)$, `size` $=r$ and `prob` $=p$.  The shorter arguments of `size` and `prob` are `recycle`d.
+A vectorized parameterization of the random `marks` generation is used in the R code below, i.e., `meanlog` $= (\log\mu_1, \log\mu_2)$, `sdlog` $= (\log\sigma_1, \log\sigma_2)$, `size` $=r$ and `prob` $=p$. The shorter arguments of `size` and `prob` are `recycle`d.
 
 ```{r}
 #| code-summary: Two superimposed Matérn's cluster process with log-normal and negative-binomial marks
@@ -155,9 +154,9 @@ User may `superimpose` different (`marked`) point patterns after simulating each
 spatstat.geom::superimpose(r1, r2)
 ```
 
-# Simulated `groupedHyperframe`
+# Simulated `groupedHyperframe` {#sec-grouped_rppp}
 
-Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects.
+Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects via [**matrix parameterization**]{style="background-color: #FFFF00"}. The matrix parameterization is supported in the specification of both the random point pattern and the random `marks`. Technical details of the vectorized parameterization is covered in Appendix @sec-grouped_rppp-appendix.
 
 ## with Matérn's cluster processes {#sec-groupedHyperframe_Matern}
 
@@ -295,7 +294,7 @@ plot(r$ppp[[1L]])
 
 ## `rfactor()`
 
-Function `rfactor()` is a wrapper of function `base::sample.int()`.   Function `rfactor()`
+Function `rfactor()` is a wrapper of function `base::sample.int()`. Function `rfactor()`
 
 -   has first parameter `n` of random sample size, similar to functions `stats::rlnorm()`, `stats::rnbinom()`, etc.
 -   returns a `factor`
@@ -304,32 +303,28 @@ Function `rfactor()` is a wrapper of function `base::sample.int()`.   Function `
 set.seed(18); rfactor(n = 20L, prob = c(4,2,3))
 ```
 
-
 ```{r}
 set.seed(18); rfactor(n = 20L, prob = c(4,2,3), levels = letters[1:3])
 ```
 
+## `.rppp()` {#sec-rppp-appendix}
 
-## `.rppp()`
-
-The vectorized parameterization of function `.rppp()` is implemented by advanced R `language` operations, starting with a `match.call`.  
-
-```{r}
-set.seed(12); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
-```
-
-The code snippet with vectorized parameterization **cannot** be taken outside function `.rppp()`.
+Function `.rppp()` implements the vectorized parameterization using advanced R `language` operations. The code snippet inside function `.rppp()` in @sec-rppp **cannot** be taken outside function `.rppp()`!
 
 ```{r}
 tryCatch(spatstat.random::rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), error = identity)
 ```
 
+## `grouped_rppp()` {#sec-grouped_rppp-appendix}
 
+Function `grouped_rppp()` implements the matrix parameterization using advanced R `language` operations. The code snippet inside function `grouped_rppp()` in @sec-grouped_rppp **cannot** be taken outside function `grouped_rppp()`!
 
-## `grouped_rppp()`
-
-🚧 This section is under construction.
-
+```{r}
+tryCatch(p_Matern |> 
+  with.default(expr = {
+    spatstat.random::rMatClust(kappa = kappa, scale = scale, mu = mu)
+  }), error = identity)
+```
 
 # Terms & Abbreviations {#sec-terms}
 
