@@ -3,7 +3,6 @@
 export(.rppp)
 export(grouped_rppp)
 export(mvrnorm2)
-export(r_marks)
 export(rfactor)
 import(spatstat.random)
 importFrom(MASS,mvrnorm)

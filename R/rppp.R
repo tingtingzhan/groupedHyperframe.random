@@ -46,6 +46,7 @@
 #' @keywords internal
 #' @importFrom cli cli_text col_blue col_magenta
 #' @importFrom spatstat.geom square superimpose.ppp
+#' @importFrom groupedHyperframe append_marks<-
 #' @export
 .rppp <- function(
     ..., 
@@ -114,22 +115,19 @@
   } else if ('W' %in% rnm) {
     list(W = win)
   } else stop('shouldnt happen')
-  #winpar <- switch(r[1L], rCauchyHom =, rDGS =, rDiggleGratton =, rGRFcircembed =, rGRFexpo =, rGRFgauss =, rStrauss = {
-  #  # tzh stopped checking at spatstat.random::rGRFgauss
-  #  list(W = win)
-  #  # write to Dr. Baddeley?
-  #}, list(win = win))
   
   fn <- \(j) { # (j = 1L)
     X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
     for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
-      X <- do.call(what = r_marks(r[i]), args = c(list(x = X), unclass(par[[i]][j, , drop = FALSE])))
+      append_marks(X) <- c(list(n = X$n), unclass(par[[i]][j, , drop = FALSE])) |>
+        do.call(what = r[i], args = _)
     } # for-loop is the easiest!!!
     return(X)
   } 
   
   ret <- replicate(n = n, expr = {
-    seq_len(npar) |>
+    npar |>
+      seq_len() |>
       lapply(FUN = fn) |> 
       do.call(what = superimpose.ppp)
     # ?spatstat.geom::superimpose.ppp does not respect ncol-1 'dataframe' marks!! i.e. it forces `drop`

@@ -27,7 +27,7 @@ vignette: >
 
 This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-project.org/package=groupedHyperframe.random), [Github](https://github.com/tingtingzhan/groupedHyperframe.random), [RPubs](https://rpubs.com/tingtingzhan/groupedHyperframe_random)) documents
 
--   the simulation of `superimpose`d (marked) point-pattern `ppp.object`
+-   the simulation of `superimpose`d (marked) point-pattern `ppp.object` via ***vectorized parameterization***;
 -   the simulation of grouped hyper data frame `groupedHyperframe`.
 
 R terminology might be different from that of mathematics and statistics. Please refer to Appendix @sec-terms for explanation and reference of the terms and abbreviations used in this vignette.
@@ -45,13 +45,6 @@ Package **`groupedHyperframe.random`** `Imports` packages
 -   `r '\U1f5dd'` **`spatstat.geom`** (dev v`r packageVersion('spatstat.geom')`) and **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`) [@spatstat15; @spatstat05], key dependency, for operation and simulation of `ppp.object` and `marks`
 -   `r '\U1f5dd'` **`groupedHyperframe`** [@groupedHyperframe, v`r packageVersion('groupedHyperframe')`], key dependency, for function `` groupedHyperframe::`append_marks<-`() ``
 
-```{=html}
-<!--
-Package **`groupedHyperframe.random`** `Suggests` packages
-
--   `r '\U1f5dd'` **`spatstat.data`** (dev v`r packageVersion('spatstat.data')`), key suggest, for example spatial data set
--->
-```
 
 ## Prerequisite
 
@@ -118,12 +111,12 @@ This work is supported by National Institutes of Health, U.S. Department of Heal
 
 # Simulated Point Pattern
 
-Function `.rppp()` simulates `superimpose`d `ppp.object`s with *vectorized* parameterization of the random point pattern and the distribution of `marks`. Function `.rppp()` returns a `ppp.object`.
+Function `.rppp()` simulates `superimpose`d `ppp.object` via   ***vectorized parameterization***.  The vectorized parameterization is support in the specification of both the random point pattern and the random `marks`. 
 
-Example below simulates an $x$- and $y$- `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes $(\kappa, \mu, s)$ `(kappa, mu, scale)` with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$.
+Example below simulates an $x$- and $y$- `coords`-only, un`marked`, two `superimpose`d @Matern1986's cluster processes $(\kappa, \mu, s)$ `(kappa, mu, scale)` with parameters $(\kappa_1, \mu_1, s_1) = (10,8,.15)$ and $(\kappa_2, \mu_2, s_2) = (5,4,.06)$. A vectorized parameterization of the random point pattern generation is used in the R code below, i.e., `kappa` $= (\kappa_1, \kappa_2)$, `mu` $= (\mu_1, \mu_2)$ and `scale` $= (s_1, s_2)$.
 
 ```{r}
-set.seed(125); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
+set.seed(12); r = .rppp(rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)))
 ```
 
 Example below simulates two `superimpose`d `marked` `ppp.object`s,
@@ -131,12 +124,14 @@ Example below simulates two `superimpose`d `marked` `ppp.object`s,
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_1,\mu_1,s_1) = (10,8,.15)$, with a log-normal $(\log\mu, \log\sigma)$ `(meanlog, sdlog)` mark with parameters $(\log\mu_1,\log\sigma_1)=(3,.4)$ and a negative-binomial $(r, p)$ `(size, prob)` mark with parameters $(r,p)=(4,.3)$.
 -   $x$- and $y$-`coords` by Matérn's cluster process $(\kappa_2,\mu_2,s_2) = (5,4,.06)$, with a log-normal mark $(\log\mu_2,\log\sigma_2)=(5,.2)$ and a negative-binomial mark $(r,p)=(4,.3)$.
 
+A vectorized parameterization of the random `marks` generation is used in the R code below, i.e., `meanlog` $= (\log\mu_1, \log\mu_2)$, `sdlog` $= (\log\sigma_1, \log\sigma_2)$, `size` $=r$ and `prob` $=p$.  The shorter arguments of `size` and `prob` are `recycle`d.
+
 ```{r}
 #| code-summary: Two superimposed Matérn's cluster process with log-normal and negative-binomial marks
-set.seed(125); r1 = .rppp(
+set.seed(25); r1 = .rppp(
   rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), 
   rlnorm(meanlog = c(3, 5), sdlog = c(.4, .2)),
-  rnbinom(size = 4, prob = .3) # shorter parameter recycled
+  rnbinom(size = 4, prob = .3) # shorter arguments recycled
 )
 ```
 
@@ -298,23 +293,22 @@ plot(r$ppp[[1L]])
 
 # Appendix
 
-## `r_marks()`
+## `rfactor()`
+
+Function `rfactor()` is a wrapper of function `base::sample.int()`.   Function `rfactor()`
+
+-   has first parameter `n` of random sample size, similar to functions `stats::rlnorm()`, `stats::rnbinom()`, etc.
+-   returns a `factor`
 
 ```{r}
-r_marks(rlnorm)
+set.seed(18); rfactor(n = 20L, prob = c(4,2,3))
 ```
 
-```{r}
-r_marks('rnbinom')
-```
 
 ```{r}
-(pp = spatstat.random::rpoispp(lambda = 100))
-set.seed(12); pp |>
-  r_marks(rlnorm)(sdlog = .5) |>
-  r_marks(rnbinom)(size = 5L, prob = .3) |>
-  r_marks(rfactor)(prob = c(2,1,3), levels = letters[1:3])
+set.seed(18); rfactor(n = 20L, prob = c(4,2,3), levels = letters[1:3])
 ```
+
 
 ## `.rppp()`
 
@@ -333,6 +327,7 @@ set.seed(12); pp |>
 | `CRAN`, `R` | [The Comprehensive R Archive Network](https://cran.r-project.org) |
 | [`coords`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/coords.html) | $x$- and $y$-coordinates, from package **`spatstat.geom`** [@spatstat05] |
 | [`diag`](https://search.r-project.org/R/refmans/base/html/diag.html) | Matrix diagonals |
+| [`factor`](https://search.r-project.org/R/refmans/base/html/factor.html) | Categorical object in R |
 | [`groupedHyperframe`](https://CRAN.R-project.org/package=groupedHyperframe) | Grouped hyper data frame, from package **`groupedHyperframe`** [@groupedHyperframe] |
 | `hypercolumns`, [`hyperframe`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/hyperframe.html) | (Hyper columns of) hyper data frame, from package **`spatstat.geom`** [@spatstat05] |
 | [`marks`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/spatstat.geom-internal.html), [`marked`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/is.marked.html) | Marks of a point pattern |
