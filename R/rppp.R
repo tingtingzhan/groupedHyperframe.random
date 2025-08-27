@@ -101,8 +101,7 @@
   r[-1L] |> 
     lapply(FUN = \(i) {
       pkg <- i |> get() |> environment() |> getNamespaceName()
-      paste(pkg, i, sep = '::') |> 
-        sprintf(fmt = 'Mark simulated by {.fun %s}') |> 
+      sprintf(fmt = 'Mark simulated by {.fun %s::%s}', pkg, i) |> 
         col_magenta() |>
         cli_text() |>
         message(appendLF = FALSE)
@@ -114,7 +113,7 @@
     list(win = win)
   } else if ('W' %in% rnm) {
     list(W = win)
-  } else stop('shouldnt happen')
+  } else stop('shouldnt happen') # to take care of Dr. Baddeley's 'poor code management' :))
   
   fn <- \(j) { # (j = 1L)
     X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
@@ -131,7 +130,6 @@
       lapply(FUN = fn) |> 
       do.call(what = superimpose.ppp)
     # ?spatstat.geom::superimpose.ppp does not respect ncol-1 'dataframe' marks!! i.e. it forces `drop`
-    # as of packageVersion('spatstat.geom') 3.5.0.3
     # the last line of ?spatstat.geom::superimpose.ppp does not even have `drop` parameter hhahah
   }, simplify = FALSE)
   

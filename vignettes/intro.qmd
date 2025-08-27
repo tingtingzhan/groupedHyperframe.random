@@ -32,7 +32,7 @@ This vignette of package **`groupedHyperframe.random`** ([CRAN](https://CRAN.R-p
 
 R terminology might be different from that of mathematics and statistics. Please refer to Appendix @sec-terms for explanation and reference of the terms and abbreviations used in this vignette.
 
-Package **`groupedHyperframe.random`** `Enhances` the package **`spatstat.random`** (dev v`r packageVersion('spatstat.random')`).
+Package **`groupedHyperframe.random`** `Enhances` the package **`spatstat.random`** [@spatstat15; @spatstat05, dev v`r packageVersion('spatstat.random')`].
 
 Package **`groupedHyperframe.random`** `Depends` on packages
 
@@ -156,7 +156,7 @@ spatstat.geom::superimpose(r1, r2)
 
 # Simulated `groupedHyperframe` {#sec-grouped_rppp}
 
-Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects via [**matrix parameterization**]{style="background-color: #FFFF00"}. The matrix parameterization is supported in the specification of both the random point pattern and the random `marks`. Technical details of the vectorized parameterization is covered in Appendix @sec-grouped_rppp-appendix.
+Function `grouped_rppp()` simulates `groupedHyperframe` based on population parameters and subject-specific random effects via [**matrix parameterization**]{style="background-color: #FFFF00"}. The matrix parameterization is supported in the specification of both the random point pattern and the random `marks`. Technical details of the matrix parameterization is covered in Appendix @sec-grouped_rppp-appendix.
 
 ## with Matérn's cluster processes {#sec-groupedHyperframe_Matern}
 
@@ -200,6 +200,7 @@ p_Matern
 We simulate one (`1L`) to four (`4L`) `ppp.object`s (e.g., medical images) for each of the three (`3L`) subjects (e.g., patients).
 
 ```{r}
+#| label: n_grouped_rppp
 set.seed(37); (n = sample(x = 1:4, size = 3L, replace = TRUE)) 
 ```
 
@@ -255,6 +256,10 @@ p_Poisson
 We simulate one (`1L`) to four (`4L`) `ppp.object`s (e.g., medical images) for each of the three (`3L`) subjects (e.g., patients), using the same grouping size as in @sec-groupedHyperframe_Matern.
 
 ```{r}
+<<n_grouped_rppp>>
+```
+
+```{r}
 set.seed(76); r_Poisson = p_Poisson |> 
   with.default(expr = {
     grouped_rppp(
@@ -292,11 +297,13 @@ plot(r$ppp[[1L]])
 
 # Appendix
 
+We cover some minor and/or experimental features in the appendix, in order not to interrupt the main narrative of this vignette.
+
 ## `rfactor()`
 
 Function `rfactor()` is a wrapper of function `base::sample.int()`. Function `rfactor()`
 
--   has first parameter `n` of random sample size, similar to functions `stats::rlnorm()`, `stats::rnbinom()`, etc.
+-   has first parameter `n` of the random sample size, similar to functions `stats::rlnorm()`, `stats::rnbinom()`, etc.
 -   returns a `factor`
 
 ```{r}
@@ -312,7 +319,26 @@ set.seed(18); rfactor(n = 20L, prob = c(4,2,3), levels = letters[1:3])
 Function `.rppp()` implements the vectorized parameterization using advanced R `language` operations. The code snippet inside function `.rppp()` in @sec-rppp **cannot** be taken outside function `.rppp()`!
 
 ```{r}
-tryCatch(spatstat.random::rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)), error = identity)
+tryCatch(expr = {
+  spatstat.random::rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06))
+}, error = identity)
+```
+
+The native pipe operator `|>` introduced since R 4.1.0 successfully passes the code snippet into function `.rppp()`.
+
+```{r}
+set.seed(12); r = rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)) |>
+  .rppp()
+```
+
+The pipe operator `%>%` from package **`magrittr`** [@magrittr, v`r packageVersion('magrittr')`] does not pass the code snippet into function `.rppp()`!
+
+```{r}
+library(magrittr)
+tryCatch(expr = {
+  rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)) %>% 
+    .rppp()
+}, error = identity)
 ```
 
 ## `grouped_rppp()` {#sec-grouped_rppp-appendix}
@@ -320,18 +346,46 @@ tryCatch(spatstat.random::rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.1
 Function `grouped_rppp()` implements the matrix parameterization using advanced R `language` operations. The code snippet inside function `grouped_rppp()` in @sec-grouped_rppp **cannot** be taken outside function `grouped_rppp()`!
 
 ```{r}
-tryCatch(p_Matern |> 
+tryCatch(expr = {
+  p_Matern |> 
+    with.default(expr = {
+      spatstat.random::rMatClust(kappa = kappa, scale = scale, mu = mu)
+    })
+}, error = identity)
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: 'Similarly, native pipe `|>` passes the code snippet into function `grouped_rppp()`'
+<<n_grouped_rppp>>
+p_Matern |> 
   with.default(expr = {
-    spatstat.random::rMatClust(kappa = kappa, scale = scale, mu = mu)
-  }), error = identity)
+    rMatClust(kappa = kappa, scale = scale, mu = mu) |> 
+      grouped_rppp(n = n)
+  })
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: 'Similarly, **`magrittr`** pipe `%>%` does not pass the code snippet into function `grouped_rppp()`!'
+library(magrittr)
+<<n_grouped_rppp>>
+tryCatch(expr = {
+  p_Matern |> 
+    with.default(expr = {
+      rMatClust(kappa = kappa, scale = scale, mu = mu) %>% 
+        grouped_rppp(n = n)
+  })
+}, error = identity)
 ```
 
 # Terms & Abbreviations {#sec-terms}
 
 | Term / Abbreviation | Description |
 |------------------------------------|------------------------------------|
-| [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since `R` 4.1.0 |
-| `CRAN`, `R` | [The Comprehensive R Archive Network](https://cran.r-project.org) |
+| [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since R 4.1.0 |
+| CRAN, R | [The Comprehensive R Archive Network](https://cran.r-project.org) |
+| [`%>%`](https://search.r-project.org/CRAN/refmans/magrittr/html/pipe.html) | Pipe operator, from package **`magrittr`** [@magrittr] |
 | [`coords`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/coords.html) | $x$- and $y$-coordinates, from package **`spatstat.geom`** [@spatstat05] |
 | [`diag`](https://search.r-project.org/R/refmans/base/html/diag.html) | Matrix diagonals |
 | [`factor`](https://search.r-project.org/R/refmans/base/html/factor.html) | Categorical object in R |
@@ -343,13 +397,15 @@ tryCatch(p_Matern |>
 | [`mapply`](https://search.r-project.org/R/refmans/base/html/mapply.html) | Apply a [`function`](https://search.r-project.org/R/refmans/base/html/function.html) to multiple [`list`](https://search.r-project.org/R/refmans/base/html/list.html) or [`vector`](https://search.r-project.org/R/refmans/base/html/vector.html) arguments |
 | [`mvrnorm`](https://search.r-project.org/CRAN/refmans/MASS/html/mvrnorm.html) | Multivariate normal random variable, from package **`MASS`** [@MASS] |
 | [`pmax`, `pmin`](https://search.r-project.org/R/refmans/base/html/Extremes.html) | Parallel maxima and minima |
-| [`ppp`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/ppp.html), [`ppp.object`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/ppp.object.html) | (Marked) point pattern, from package **`spatstat.geom`** |
+| [`ppp`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/ppp.html), [`ppp.object`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/ppp.object.html) | (Marked) point pattern, from package **`spatstat.geom`** [@spatstat05] |
 | `recycle` | Recycling, <https://r4ds.had.co.nz/vectors.html#scalars-and-recycling-rules> |
 | [`rlnorm`](https://search.r-project.org/R/refmans/stats/html/Lognormal.html) | Log normal random variable |
-| [`rMatClust`](https://search.r-project.org/CRAN/refmans/spatstat.random/html/rMatClust.html) | @Matern1986's cluster process [@rMatClust], from package **`spatstat.random`** |
+| [`rMatClust`](https://search.r-project.org/CRAN/refmans/spatstat.random/html/rMatClust.html) | @Matern1986's cluster process [@rMatClust], from package **`spatstat.random`** [@spatstat05] |
 | [`rnbinom`](https://search.r-project.org/R/refmans/stats/html/NegBinomial.html) | Negative binomial random variable |
-| [`rpoispp`](https://search.r-project.org/CRAN/refmans/spatstat.random/html/rpoispp.html) | Poisson point pattern, from package **`spatstat.random`** |
-| [`superimpose`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/superimpose.html) | Superimpose, from package **`spatstat.geom`** |
+| [`rpoispp`](https://search.r-project.org/CRAN/refmans/spatstat.random/html/rpoispp.html) | Poisson point pattern, from package **`spatstat.random`** [@spatstat05] |
+| [`sample`, `sample.int`](https://search.r-project.org/R/refmans/base/html/sample.html) | Random sampling |
+| [`search`](https://search.r-project.org/R/refmans/base/html/search.html) | Search path for R objects |
+| [`superimpose`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/superimpose.html) | Superimpose, from package **`spatstat.geom`** [@spatstat05] |
 | [`tryCatch`](https://search.r-project.org/R/refmans/base/html/conditions.html) | Condition handling and recovery |
 | [`var`, `cor`, `cov`](https://search.r-project.org/R/refmans/stats/html/cor.html) | Variance, correlation, covariance |
 
