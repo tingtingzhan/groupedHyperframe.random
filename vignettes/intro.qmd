@@ -297,7 +297,17 @@ plot(r$ppp[[1L]])
 
 # Appendix
 
-We cover some minor and/or experimental features in the appendix, in order not to interrupt the main narrative of this vignette.
+Technical details, as well as the minor and/or experimental features, are covered in the Appendix, in order not to interrupt the main narrative of this vignette.
+
+All R code-chunks are folded in the Appendix, for ease of navigation. They are categorized as
+
+-   **Data**, to create an R object for further operations.
+-   **Review**, to demonstrate functions shipped with vanilla `r R.version.string`, or from other packages.
+-   **Example**, to demonstrate functions from package **`groupedHyperframe`**.
+-   **Advanced**, discussions for R experts.
+-   **Figure**, to create a `ggplot`.
+-   **Workaround**, to provide alternative solutions to a problem.
+
 
 ## `rfactor()`
 
@@ -307,10 +317,14 @@ Function `rfactor()` is a wrapper of function `base::sample.int()`. Function `rf
 -   returns a `factor`
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Example**: `rfactor()`'
 set.seed(18); rfactor(n = 20L, prob = c(4,2,3))
 ```
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Example**: `rfactor()` with `levels`'
 set.seed(18); rfactor(n = 20L, prob = c(4,2,3), levels = letters[1:3])
 ```
 
@@ -319,6 +333,8 @@ set.seed(18); rfactor(n = 20L, prob = c(4,2,3), levels = letters[1:3])
 Function `.rppp()` implements the vectorized parameterization using advanced R `language` operations. The code snippet inside function `.rppp()` in @sec-rppp **cannot** be taken outside function `.rppp()`!
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Advanced**: without `language` operation'
 tryCatch(expr = {
   spatstat.random::rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06))
 }, error = identity)
@@ -327,6 +343,8 @@ tryCatch(expr = {
 The native pipe operator `|>` introduced since R 4.1.0 successfully passes the code snippet into function `.rppp()`.
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Advanced**: `language` operation via native pipe `|>`'
 set.seed(12); r = rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)) |>
   .rppp()
 ```
@@ -334,6 +352,8 @@ set.seed(12); r = rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06))
 The pipe operator `%>%` from package **`magrittr`** [@magrittr, v`r packageVersion('magrittr')`] does not pass the code snippet into function `.rppp()`!
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Advanced**: `language` operation via `` magrittr::`%>%` ``'
 library(magrittr)
 tryCatch(expr = {
   rMatClust(kappa = c(10, 5), mu = c(8, 4), scale = c(.15, .06)) %>% 
@@ -346,6 +366,8 @@ tryCatch(expr = {
 Function `grouped_rppp()` implements the matrix parameterization using advanced R `language` operations. The code snippet inside function `grouped_rppp()` in @sec-grouped_rppp **cannot** be taken outside function `grouped_rppp()`!
 
 ```{r}
+#| code-fold: true
+#| code-summary: '**Advanced**: without `language` operation'
 tryCatch(expr = {
   p_Matern |> 
     with.default(expr = {
@@ -354,9 +376,12 @@ tryCatch(expr = {
 }, error = identity)
 ```
 
+Similarly, the native pipe operator `|>` introduced since R 4.1.0 successfully passes the code snippet into function `grouped_rppp()`, while the pipe operator `%>%` from package **`magrittr`** [@magrittr, v`r packageVersion('magrittr')`] does not pass the code snippet into function `grouped_rppp()`!
+
+
 ```{r}
 #| code-fold: true
-#| code-summary: 'Similarly, native pipe `|>` passes the code snippet into function `grouped_rppp()`'
+#| code-summary: '**Advanced**: `language` operation via native pipe `|>`'
 <<n_grouped_rppp>>
 p_Matern |> 
   with.default(expr = {
@@ -367,7 +392,7 @@ p_Matern |>
 
 ```{r}
 #| code-fold: true
-#| code-summary: 'Similarly, **`magrittr`** pipe `%>%` does not pass the code snippet into function `grouped_rppp()`!'
+#| code-summary: '**Advanced**: `language` operation via `` magrittr::`%>%` ``'
 library(magrittr)
 <<n_grouped_rppp>>
 tryCatch(expr = {
@@ -381,8 +406,13 @@ tryCatch(expr = {
 
 # Terms & Abbreviations {#sec-terms}
 
+@tbl-Rterm presents a comprehensive glossary of R terms and abbreviations used in this vignette.  
+
+R terminology and nomenclature could be *drastically different* from that of mathematics and statistics.  Users are *strongly advised* to read closely from the links in @tbl-Rterm, which point to webpages on [search.r-project.org](https://search.r-project.org), [cran.r-project.org](https://cran.r-project.org), and [en.wikipedia.org](https://en.wikipedia.org).
+
+
 | Term / Abbreviation | Description |
-|------------------------------------|------------------------------------|
+|:------------------------------------|:------------------------------------|
 | [`|>`](https://search.r-project.org/R/refmans/base/html/pipeOp.html) | Forward pipe operator introduced since R 4.1.0 |
 | CRAN, R | [The Comprehensive R Archive Network](https://cran.r-project.org) |
 | [`%>%`](https://search.r-project.org/CRAN/refmans/magrittr/html/pipe.html) | Pipe operator, from package **`magrittr`** [@magrittr] |
@@ -408,6 +438,10 @@ tryCatch(expr = {
 | [`superimpose`](https://search.r-project.org/CRAN/refmans/spatstat.geom/html/superimpose.html) | Superimpose, from package **`spatstat.geom`** [@spatstat05] |
 | [`tryCatch`](https://search.r-project.org/R/refmans/base/html/conditions.html) | Condition handling and recovery |
 | [`var`, `cor`, `cov`](https://search.r-project.org/R/refmans/stats/html/cor.html) | Variance, correlation, covariance |
+
+: Terms & Abbreviations in R {#tbl-Rterm}
+
+
 
 # References
 
