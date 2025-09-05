@@ -1,7 +1,7 @@
 ---
 title: "Simulated Grouped Hyper Data Frame"
 author: Tingting Zhan
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: today
 format: 
   html:
     page-layout: full
