@@ -443,7 +443,7 @@ R terminology and nomenclature could be *drastically different* from that of mat
 
 
 
-# References
+# References {.appendix}
 
 ::: {#refs}
 :::
