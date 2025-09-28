@@ -18,6 +18,8 @@
 #' 
 #' @param sd \link[base]{numeric} scalar or a \link[base]{vector}, standard deviation(s)
 #' 
+#' @param Sigma \link[base]{numeric} \link[stats]{var}iance-\link[stats]{cov}ariace \link[base]{matrix}, see function \link[MASS]{mvrnorm}
+#' 
 #' @param ... additional parameter of function \link[MASS]{mvrnorm}
 #' 
 #' @details
@@ -45,11 +47,24 @@
 #' @keywords internal
 #' @importFrom MASS mvrnorm
 #' @export
-mvrnorm2 <- function(n, mu, sd, ...) {
+mvrnorm2 <- function(
+    n, 
+    mu, 
+    sd, 
+    Sigma = diag(x = sd^2, nrow = d, ncol = d),
+    ...
+) {
+  
   d <- length(mu)
-  nsd <- length(sd)
-  if (nsd == 1L) sd <- rep(sd, times = d)
-  if (length(sd) != d) stop('`length(sd)` not same with length(mu)')
-  Sigma <- diag(x = sd^2, nrow = d, ncol = d)
-  mvrnorm(n = n, mu = mu, Sigma = Sigma) # matrix of `n`-by-`d`
+  
+  if (!missing(sd)) {
+    nsd <- length(sd)
+    if (nsd == 1L) sd <- rep(sd, times = d)
+    if (length(sd) != d) stop('`length(sd)` not same with length(mu)')
+  }
+  
+  force(Sigma)
+  
+  mvrnorm(n = n, mu = mu, Sigma = Sigma, ...) # matrix of `n`-by-`d`
+  
 }
