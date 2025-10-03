@@ -116,11 +116,15 @@
   } else stop('shouldnt happen') # to take care of Dr. Baddeley's 'poor code management' :))
   
   fn <- \(j) { # (j = 1L)
-    X <- do.call(what = r1, args = c(winpar, unclass(par[[1L]][j, , drop = FALSE]))) # `X$n` is randomly generated too!
-    for (i in seq_along(r)[-1L]) { # length(r) == 1L # compatible
-      append_marks(X) <- c(list(n = X$n), unclass(par[[i]][j, , drop = FALSE])) |>
-        do.call(what = r[i], args = _)
-    } # for-loop is the easiest!!!
+    X <- c(winpar, unclass(par[[1L]][j, , drop = FALSE])) |> 
+      do.call(what = r1, args = _) # `X$n` is randomly generated too!
+    m <- mapply(FUN = \(par, r) {
+      c(list(n = X$n), unclass(par[j, , drop = FALSE])) |> 
+        do.call(what = r, args = _)
+    }, par = par[-1L], r = r[-1L], SIMPLIFY = FALSE)
+    # *it seems* that since R 4.5.1 for-loop messes up with random seed ??!!??!!
+    # ?base::mapply does not mess up with seeds :)))
+    append_marks(X) <- m
     return(X)
   } 
   
