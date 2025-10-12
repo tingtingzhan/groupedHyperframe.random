@@ -14,6 +14,13 @@ Users are encouraged to get started with
 
 \code{vignette('intro', package = 'groupedHyperframe.random')}
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tingtingzhan/groupedHyperframe.random}
+}
+
+}
 \author{
 \strong{Maintainer}: Tingting Zhan \email{tingtingzhan@gmail.com} (\href{https://orcid.org/0000-0001-9971-4844}{ORCID})
 
