@@ -18,7 +18,7 @@
 #' 
 #' @param sd \link[base]{numeric} scalar or a \link[base]{vector}, standard deviation(s)
 #' 
-#' @param Sigma \link[base]{numeric} \link[stats]{var}iance-\link[stats]{cov}ariace \link[base]{matrix}, see function \link[MASS]{mvrnorm}
+#' @param Sigma \link[base]{numeric} \link[stats]{var}iance-\link[stats]{cov}ariance \link[base]{matrix}, see function \link[MASS]{mvrnorm}
 #' 
 #' @param ... additional parameter of function \link[MASS]{mvrnorm}
 #' 

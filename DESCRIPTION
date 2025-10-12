@@ -1,7 +1,7 @@
 Package: groupedHyperframe.random
 Type: Package
 Title: Simulated Grouped Hyper Data Frame
-Version: 0.1.0.20251002
+Version: 0.2.0
 Description: An intuitive interface to simulate (1) superimposed (marked) point patterns with vectorized parameterization of random point pattern and distribution of marks; and (2) grouped hyper data frame based on population parameters and subject-specific random effects.
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
