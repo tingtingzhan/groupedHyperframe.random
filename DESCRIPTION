@@ -17,7 +17,7 @@ Authors@R: c(person(given = 'Tingting', family =
       c(ORCID = '0000-0002-9104-4505')))
 URL: 
     https://github.com/tingtingzhan/groupedHyperframe.random
-Depends: R (>= 4.5), groupedHyperframe
+Depends: R (>= 4.5), groupedHyperframe (>= 0.3.0)
 Imports: cli, MASS, spatstat.geom, spatstat.random
 Suggests: knitr, quarto, rmarkdown, magrittr
 VignetteBuilder: quarto
