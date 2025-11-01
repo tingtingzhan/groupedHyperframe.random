@@ -1,7 +1,7 @@
 Package: groupedHyperframe.random
 Type: Package
 Title: Simulated Grouped Hyper Data Frame
-Version: 0.2.0
+Version: 0.2.0.20251031
 Description: An intuitive interface to simulate (1) superimposed (marked) point patterns with vectorized parameterization of random point pattern and distribution of marks; and (2) grouped hyper data frame based on population parameters and subject-specific random effects.
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
@@ -12,12 +12,12 @@ Authors@R: c(person(given = 'Tingting', family =
       'Zhan', role = c('aut', 'cre'), email =
       'tingtingzhan@gmail.com', comment = c(ORCID =
       '0000-0001-9971-4844')), person(given = 'Inna',
-      family = 'Chervoneva', role = c('aut'), email =
+      family = 'Chervoneva', role = c('ctb'), email =
       'Inna.Chervoneva@jefferson.edu', comment =
       c(ORCID = '0000-0002-9104-4505')))
 URL: 
-    https://github.com/tingtingzhan/groupedHyperframe.random
+    https://tingtingzhan.quarto.pub/groupedhyperframe/random
 Depends: R (>= 4.5), groupedHyperframe (>= 0.3.0)
 Imports: cli, MASS, spatstat.geom, spatstat.random
-Suggests: knitr, quarto, rmarkdown, magrittr
+Suggests: knitr, quarto, rmarkdown
 VignetteBuilder: quarto
