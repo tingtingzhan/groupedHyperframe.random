@@ -44,9 +44,7 @@
 #' Therefore we name this function [.rppp()] as if it is hidden (see parameter `all.names` of function \link[base]{ls}).
 #' 
 #' @keywords internal
-#' @importFrom cli cli_text col_blue col_magenta
-#' @importFrom spatstat.geom square superimpose.ppp
-#' @importFrom groupedHyperframe append_marks<-
+#' @importFrom spatstat.geom square superimpose.ppp marks<- marks<-.ppp
 #' @export
 .rppp <- function(
     ..., 
@@ -118,13 +116,15 @@
   fn <- \(j) { # (j = 1L)
     X <- c(winpar, unclass(par[[1L]][j, , drop = FALSE])) |> 
       do.call(what = r1, args = _) # `X$n` is randomly generated too!
-    m <- mapply(FUN = \(par, r) {
-      c(list(n = X$n), unclass(par[j, , drop = FALSE])) |> 
-        do.call(what = r, args = _)
-    }, par = par[-1L], r = r[-1L], SIMPLIFY = FALSE)
-    # *it seems* that since R 4.5.1 for-loop messes up with random seed ??!!??!!
-    # ?base::mapply does not mess up with seeds :)))
-    append_marks(X) <- m
+    marks(X) <- mapply(
+      # *it seems* that since R 4.5.1 for-loop messes up with random seed ??!!??!!
+      # ?base::mapply does not mess up with seeds :)))
+      FUN = \(par, r) {
+        c(list(n = X$n), unclass(par[j, , drop = FALSE])) |> 
+          do.call(what = r, args = _)
+      }, 
+      par = par[-1L], r = r[-1L], SIMPLIFY = FALSE) |>
+      as.data.frame.list()
     return(X)
   } 
   

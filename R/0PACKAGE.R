@@ -1,14 +1,10 @@
 
 
 
-#' @note
-#' Help files of individual functions are intentionally suppressed in the `pdf` manual.
-#' Users are encouraged to get started with 
-#' 
-#' `vignette('intro', package = 'groupedHyperframe.random')`
-#' 
+#' @keywords internal
+#' @import cli
 #' @import spatstat.random
-# @importFrom groupedHyperframe superimpose.groupedHyperframe # still need to Depends
+#' @import groupedHyperframe
 '_PACKAGE'
 
 

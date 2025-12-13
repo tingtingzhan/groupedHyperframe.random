@@ -8,12 +8,6 @@
 \description{
 An intuitive interface to simulate (1) superimposed (marked) point patterns with vectorized parameterization of random point pattern and distribution of marks; and (2) grouped hyper data frame based on population parameters and subject-specific random effects.
 }
-\note{
-Help files of individual functions are intentionally suppressed in the \code{pdf} manual.
-Users are encouraged to get started with
-
-\code{vignette('intro', package = 'groupedHyperframe.random')}
-}
 \seealso{
 Useful links:
 \itemize{
@@ -30,3 +24,4 @@ Other contributors:
 }
 
 }
+\keyword{internal}
