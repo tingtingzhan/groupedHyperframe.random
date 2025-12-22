@@ -4,7 +4,15 @@
 \alias{mvrnorm2}
 \title{Expand Types of \code{Sigma} in \link[MASS]{mvrnorm}}
 \usage{
-mvrnorm2(n, mu, sd, Sigma = diag(x = sd^2, nrow = d, ncol = d), ...)
+mvrnorm2(
+  n,
+  mu,
+  sd,
+  Sigma = diag(x = sd^2, nrow = d, ncol = d),
+  row.prefix,
+  col.prefix,
+  ...
+)
 }
 \arguments{
 \item{n}{\link[base]{integer} scalar, sample size}
@@ -15,6 +23,8 @@ multivariate means \eqn{\mathbf{\mu}}'s}
 \item{sd}{\link[base]{numeric} scalar or a \link[base]{vector}, standard deviation(s)}
 
 \item{Sigma}{\link[base]{numeric} \link[stats]{var}iance-\link[stats]{cov}ariance \link[base]{matrix}, see function \link[MASS]{mvrnorm}}
+
+\item{row.prefix, col.prefix}{(optional) \link[base]{character} scalars}
 
 \item{...}{additional parameter of function \link[MASS]{mvrnorm}}
 }

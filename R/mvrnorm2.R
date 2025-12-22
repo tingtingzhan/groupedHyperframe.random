@@ -20,6 +20,8 @@
 #' 
 #' @param Sigma \link[base]{numeric} \link[stats]{var}iance-\link[stats]{cov}ariance \link[base]{matrix}, see function \link[MASS]{mvrnorm}
 #' 
+#' @param row.prefix,col.prefix (optional) \link[base]{character} scalars
+#' 
 #' @param ... additional parameter of function \link[MASS]{mvrnorm}
 #' 
 #' @details
@@ -52,6 +54,7 @@ mvrnorm2 <- function(
     mu, 
     sd, 
     Sigma = diag(x = sd^2, nrow = d, ncol = d),
+    row.prefix, col.prefix,
     ...
 ) {
   
@@ -65,6 +68,18 @@ mvrnorm2 <- function(
   
   force(Sigma)
   
-  mvrnorm(n = n, mu = mu, Sigma = Sigma, ...) # matrix of `n`-by-`d`
+  z <- mvrnorm(n = n, mu = mu, Sigma = Sigma, ...) # matrix of `n`-by-`d`
+  
+  if (!missing(row.prefix)) {
+    if (!is.character(row.prefix) || length(row.prefix) != 1L || is.na(row.prefix) || !nzchar(row.prefix)) stop('illegal `row.prefix`')
+    rownames(z) <- paste(row.prefix, seq_len(n))
+  }
+  
+  if (!missing(col.prefix)) {
+    if (!is.character(col.prefix) || length(col.prefix) != 1L || is.na(col.prefix) || !nzchar(col.prefix)) stop('illegal `col.prefix`')
+    colnames(z) <- paste(col.prefix, seq_len(ncol(z)))
+  }
+  
+  return(z)
   
 }
