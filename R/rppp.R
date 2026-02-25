@@ -79,7 +79,7 @@
   par0 <- dots |>
     unlist(recursive = FALSE) |>
     as.data.frame.list() # recycle parameter between all `r`s
-  npar <- .row_names_info(par0, type = 2L)
+  npar <- nrow(par0)
   
   par <- r |> 
     lapply(FUN = \(i) { # (i = 'rStrauss')
