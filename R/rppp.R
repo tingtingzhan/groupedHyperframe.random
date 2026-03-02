@@ -3,7 +3,7 @@
 #' @title Simulate (Marked) Point Pattern
 #' 
 #' @description
-#' To generate \link[spatstat.geom]{ppp.object}(s), 
+#' To simulate \link[spatstat.geom]{ppp.object}, 
 #' with none or one or multiple \link[spatstat.geom]{marks}.
 #' 
 #' @param ... see vignettes
@@ -29,7 +29,7 @@
 #' Default is the \link[base]{parent.frame}.
 #' 
 #' @return 
-#' Function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&element1`,
+#' The function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&element1`,
 #' otherwise returns a \link[base]{length}-`n` \link[spatstat.geom]{solist}
 #' (which also has \link[base]{class} `'ppplist'`).
 #' 
@@ -41,7 +41,10 @@
 #' 
 #' @note
 #' The name `rppp()` is too aggressive, which might be claimed in future by package \CRANpkg{spatstat.random}.
-#' Therefore we name this function [.rppp()] as if it is hidden (see parameter `all.names` of function \link[base]{ls}).
+#' Therefore we name this function [.rppp()] as if it is hidden (see parameter `all.names` of the function \link[base]{ls}).
+#' 
+#' @references
+#' \url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/rppp.html}
 #' 
 #' @keywords internal
 #' @importFrom spatstat.geom square superimpose.ppp marks<- marks<-.ppp

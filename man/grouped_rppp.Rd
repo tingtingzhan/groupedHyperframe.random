@@ -2,12 +2,13 @@
 % Please edit documentation in R/grouped_rppp.R
 \name{grouped_rppp}
 \alias{grouped_rppp}
-\title{Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}}
+\title{Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}
+with One-and-Only-One \link[spatstat.geom]{ppp}-Hypercolumn}
 \usage{
 grouped_rppp(..., n, win = square(), envir = parent.frame())
 }
 \arguments{
-\item{...}{see examples, for now}
+\item{...}{see examples in the vignette, for now}
 
 \item{n}{\link[base]{integer} \link[base]{vector},
 numbers of \link[spatstat.geom]{ppp.object}s to generate for each set of parameters}
@@ -17,9 +18,13 @@ numbers of \link[spatstat.geom]{ppp.object}s to generate for each set of paramet
 \item{envir}{\link[base]{environment}}
 }
 \value{
-Function \code{\link[=grouped_rppp]{grouped_rppp()}} returns a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}.
+The function \code{\link[=grouped_rppp]{grouped_rppp()}} returns a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}.
 }
 \description{
-Simulate \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}
+To simulate a \link[groupedHyperframe:as.groupedHyperframe]{groupedHyperframe}
+with one-and-only-one \link[spatstat.geom]{ppp}-hypercolumn.
+}
+\references{
+\url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/grouped_rppp_appx.html}
 }
 \keyword{internal}

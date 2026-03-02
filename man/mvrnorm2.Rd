@@ -26,13 +26,13 @@ multivariate means \eqn{\mathbf{\mu}}'s}
 
 \item{row.prefix, col.prefix}{(optional) \link[base]{character} scalars}
 
-\item{...}{additional parameter of function \link[MASS]{mvrnorm}}
+\item{...}{additional parameter of the function \link[MASS]{mvrnorm}}
 }
 \value{
-Function \code{\link[=mvrnorm2]{mvrnorm2()}} returns a \link[base]{double} \link[base]{matrix}.
+The function \code{\link[=mvrnorm2]{mvrnorm2()}} returns a \link[base]{double} \link[base]{matrix}.
 }
 \description{
-To accommodate more types of \code{Sigma} in function \link[MASS]{mvrnorm}.
+To accommodate more types of \code{Sigma} in the function \link[MASS]{mvrnorm}.
 }
 \details{
 Argument of parameter \code{sd} could be
@@ -50,6 +50,9 @@ is used as the \link[stats]{var}iance-\link[stats]{cov}ariance
 \link[base]{matrix} \eqn{\Sigma}
 }
 \note{
-Workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than \code{?mvtnorm::rmvnorm}.
+The workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than \code{?mvtnorm::rmvnorm}.
+}
+\references{
+\url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/mvrnorm2.html}
 }
 \keyword{internal}

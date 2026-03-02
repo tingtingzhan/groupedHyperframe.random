@@ -37,7 +37,7 @@ when \code{n==1L}. Default \code{TRUE}}
 Default is the \link[base]{parent.frame}.}
 }
 \value{
-Function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&element1},
+The function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&element1},
 otherwise returns a \link[base]{length}-\code{n} \link[spatstat.geom]{solist}
 (which also has \link[base]{class} \code{'ppplist'}).
 
@@ -48,11 +48,14 @@ Otherwise, they contain one or more \link[spatstat.geom]{marks}
 according to the rest of the \link[base]{call}(s) in the \code{...} argument.
 }
 \description{
-To generate \link[spatstat.geom]{ppp.object}(s),
+To simulate \link[spatstat.geom]{ppp.object},
 with none or one or multiple \link[spatstat.geom]{marks}.
 }
 \note{
 The name \code{rppp()} is too aggressive, which might be claimed in future by package \CRANpkg{spatstat.random}.
-Therefore we name this function \code{\link[=.rppp]{.rppp()}} as if it is hidden (see parameter \code{all.names} of function \link[base]{ls}).
+Therefore we name this function \code{\link[=.rppp]{.rppp()}} as if it is hidden (see parameter \code{all.names} of the function \link[base]{ls}).
+}
+\references{
+\url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/rppp.html}
 }
 \keyword{internal}

@@ -5,7 +5,7 @@
 #' @title Generate Random \link[base]{factor}
 #' 
 #' @description
-#' ..
+#' To generate random \link[base]{factor}.
 #' 
 #' @param n \link[base]{integer} scalar
 #' 
@@ -16,15 +16,13 @@
 # @param ... additional parameters, currently not in use
 #' 
 #' @details
-#' Function [rfactor()] is a wrapper of \link[base]{sample.int}.
-#' 
-#' 
+#' The function [rfactor()] is a wrapper of \link[base]{sample.int}.
 #' 
 #' @returns 
-#' Function [rfactor()] returns a \link[base]{factor}.
+#' The function [rfactor()] returns a \link[base]{factor}.
 #' 
 #' @note
-#' Function \link[stats]{rmultinom} is **not** what we need!
+#' The function \link[stats]{rmultinom} is **not** what we need!
 #' 
 #' @examples
 #' rfactor(n = 100L, prob = c(4,2,3))

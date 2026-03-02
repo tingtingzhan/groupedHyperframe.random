@@ -9,7 +9,7 @@
 #' @title Expand Types of `Sigma` in \link[MASS]{mvrnorm}
 #' 
 #' @description
-#' To accommodate more types of `Sigma` in function \link[MASS]{mvrnorm}.
+#' To accommodate more types of `Sigma` in the function \link[MASS]{mvrnorm}.
 #' 
 #' @param n \link[base]{integer} scalar, sample size
 #' 
@@ -22,7 +22,7 @@
 #' 
 #' @param row.prefix,col.prefix (optional) \link[base]{character} scalars
 #' 
-#' @param ... additional parameter of function \link[MASS]{mvrnorm}
+#' @param ... additional parameter of the function \link[MASS]{mvrnorm}
 #' 
 #' @details
 #' 
@@ -41,10 +41,13 @@
 #' \link[base]{matrix} \eqn{\Sigma}
 #' 
 #' @returns 
-#' Function [mvrnorm2()] returns a \link[base]{double} \link[base]{matrix}.
+#' The function [mvrnorm2()] returns a \link[base]{double} \link[base]{matrix}.
 #' 
 #' @note
-#' Workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than `?mvtnorm::rmvnorm`.
+#' The workhorse function \link[MASS]{mvrnorm} from package \CRANpkg{MASS} is faster than `?mvtnorm::rmvnorm`.
+#' 
+#' @references
+#' \url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/mvrnorm2.html}
 #' 
 #' @keywords internal
 #' @importFrom MASS mvrnorm

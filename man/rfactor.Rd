@@ -14,16 +14,16 @@ rfactor(n, prob, levels = as.character(seq_len(nprob)))
 \item{levels}{\link[base]{character} \link[base]{vector}, see function \link[base]{factor}}
 }
 \value{
-Function \code{\link[=rfactor]{rfactor()}} returns a \link[base]{factor}.
+The function \code{\link[=rfactor]{rfactor()}} returns a \link[base]{factor}.
 }
 \description{
-..
+To generate random \link[base]{factor}.
 }
 \details{
-Function \code{\link[=rfactor]{rfactor()}} is a wrapper of \link[base]{sample.int}.
+The function \code{\link[=rfactor]{rfactor()}} is a wrapper of \link[base]{sample.int}.
 }
 \note{
-Function \link[stats]{rmultinom} is \strong{not} what we need!
+The function \link[stats]{rmultinom} is \strong{not} what we need!
 }
 \examples{
 rfactor(n = 100L, prob = c(4,2,3))
