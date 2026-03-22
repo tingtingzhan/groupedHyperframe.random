@@ -20,7 +20,7 @@
 #' number of \link[spatstat.geom]{ppp.object}s to generate.
 #' Default `1L`.
 #' 
-#' @param element1 \link[base]{logical} scalar, whether to return 
+#' @param unlist1 \link[base]{logical} scalar, whether to return 
 #' a \link[spatstat.geom]{ppp.object}, 
 #' instead of a \link[base]{length}-`1L` \link[spatstat.geom]{solist},
 #' when `n==1L`. Default `TRUE`
@@ -29,7 +29,7 @@
 #' Default is the \link[base]{parent.frame}.
 #' 
 #' @return 
-#' The function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&element1`,
+#' The function [.rppp()] returns a \link[spatstat.geom]{ppp.object} if `(n==1L)&unlist1`,
 #' otherwise returns a \link[base]{length}-`n` \link[spatstat.geom]{solist}
 #' (which also has \link[base]{class} `'ppplist'`).
 #' 
@@ -47,14 +47,14 @@
 #' \url{https://tingtingzhan.quarto.pub/groupedhyperframe/nonS3/rppp.html}
 #' 
 #' @keywords internal
-#' @importFrom spatstat.geom square superimpose.ppp marks<- marks<-.ppp
+#' @importFrom spatstat.geom square superimpose.ppp marks<- marks<-.ppp solist
 #' @export
 .rppp <- function(
     ..., 
     dots,
     win = square(),
     n = 1L, 
-    element1 = TRUE,
+    unlist1 = TRUE,
     envir = parent.frame()
 ) {
   
@@ -140,13 +140,11 @@
     # the last line of ?spatstat.geom::superimpose.ppp does not even have `drop` parameter hhahah
   }, simplify = FALSE)
   
-  if ((n == 1L) && element1) return(ret[[1L]])
+  if ((n == 1L) && unlist1) return(ret[[1L]])
   
-  class(ret) <- c('ppplist', 'solist', class(ret)) # see returned value of ?spatstat.geom::split.ppp
-  # to make use of 
-  # methods(class = 'solist')
-  return(ret)
-  
+  ret |>
+    do.call(what = solist, args = _)
+
 } 
 
 

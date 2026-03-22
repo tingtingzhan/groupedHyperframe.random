@@ -57,7 +57,7 @@ grouped_rppp <- function(
   
   ppp. <- mapply(
     FUN = \(n, p) { # p = pars[[1L]]; n = n[1L]
-      list(dots = p, n = n, win = win, element1 = FALSE) |>
+      list(dots = p, n = n, win = win, unlist1 = FALSE) |>
         do.call(what = .rppp, args = _) |>
         suppressMessages()
     }, 

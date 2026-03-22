@@ -9,7 +9,7 @@
   dots,
   win = square(),
   n = 1L,
-  element1 = TRUE,
+  unlist1 = TRUE,
   envir = parent.frame()
 )
 }
@@ -28,7 +28,7 @@ generate one or more \link[spatstat.geom]{marks}.}
 number of \link[spatstat.geom]{ppp.object}s to generate.
 Default \code{1L}.}
 
-\item{element1}{\link[base]{logical} scalar, whether to return
+\item{unlist1}{\link[base]{logical} scalar, whether to return
 a \link[spatstat.geom]{ppp.object},
 instead of a \link[base]{length}-\code{1L} \link[spatstat.geom]{solist},
 when \code{n==1L}. Default \code{TRUE}}
@@ -37,7 +37,7 @@ when \code{n==1L}. Default \code{TRUE}}
 Default is the \link[base]{parent.frame}.}
 }
 \value{
-The function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&element1},
+The function \code{\link[=.rppp]{.rppp()}} returns a \link[spatstat.geom]{ppp.object} if \code{(n==1L)&unlist1},
 otherwise returns a \link[base]{length}-\code{n} \link[spatstat.geom]{solist}
 (which also has \link[base]{class} \code{'ppplist'}).
 
